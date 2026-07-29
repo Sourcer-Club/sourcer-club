@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SignalScoper – Search by Skills, Spot by Persona</title>
+<meta name="description" content="Spotlight search to find the right talent. SignalScoper surfaces persona and technical signals across 228 roles in tech, BFSI, healthcare and manufacturing."/>
+<meta name="author" content="Sourcer.club"/>
+<meta property="og:title" content="SignalScoper by Sourcer.club"/>
+<meta property="og:description" content="Spotlight search to find the right talent. 228 roles, real candidate vocabulary, Boolean strings — free and open source."/>
+<link rel="canonical" href="https://sourcer.club/signal/"/>
+<meta property="og:url" content="https://sourcer.club/signal/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://res.cloudinary.com/dcs7kqmmu/image/upload/v1777371411/OG_Banner_Image_1_vcqtdg.png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="SignalScoper by Sourcer.club"/>
+<meta name="twitter:description" content="Spotlight search to find the right talent. 228 roles, real candidate vocabulary, Boolean strings — free and open source."/>
+<meta name="twitter:image" content="https://res.cloudinary.com/dcs7kqmmu/image/upload/v1777371411/OG_Banner_Image_1_vcqtdg.png"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23c9a84c'/><text x='16' y='23' font-family='sans-serif' font-weight='800' font-size='20' fill='%230a0c10' text-anchor='middle'>S</text></svg>"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#0a0c10;
+  --surface:#111318;
+  --surface2:#161a22;
+  --border:#1e2430;
+  --border2:#2a3444;
+  --amber:#4ade9e;
+  --amber-dim:#1db870;
+  --text:#e2e8f0;
+  --text-secondary:#94a3b8;
+  --text-tertiary:#64748b;
+  --text-faint:#3a4558;
+  --green:#22c55e;
+  --blue:#38bdf8;
+  --purple:#a78bfa;
+  --tech:#fb923c;
+}
+body:not(.dark){
+  --bg:#f4f6f9;
+  --surface:#ffffff;
+  --surface2:#eef2f7;
+  --border:#e2e8f0;
+  --border2:#cbd5e1;
+  --amber:#0d9e5c;
+  --amber-dim:#0a7a47;
+  --text:#0f172a;
+  --text-secondary:#475569;
+  --text-tertiary:#64748b;
+  --text-faint:#94a3b8;
+  --green:#16a34a;
+  --blue:#2563eb;
+  --purple:#6d4fa0;
+  --tech:#c2560a;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+
+/* ── Layout ── */
+.app{max-width:820px;margin:0 auto;padding:2.5rem 1.5rem 5rem;}
+
+/* ── Header ── */
+.header{margin-bottom:2.5rem;display:flex;align-items:flex-start;justify-content:space-between;}
+.header-left{flex:1;}
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:6px;cursor:pointer;color:var(--text-tertiary);display:flex;align-items:center;justify-content:center;padding:5px 8px;flex-shrink:0;margin-top:2px;transition:all 0.15s;}
+.theme-toggle:hover{color:var(--amber);border-color:var(--amber);}
+.theme-toggle svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.icon-sun,.icon-moon{display:none;}
+body:not(.dark) .icon-moon{display:block;}
+body.dark .icon-sun{display:block;}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:0.4rem;cursor:pointer;}
+.logo-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-0.03em;}
+.logo-name span{color:var(--amber);}
+.tagline{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text-tertiary);letter-spacing:0.04em;}
+
+/* ── Search ── */
+.search-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:0.5rem;}
+.search-wrap{position:relative;margin-bottom:2rem;}
+.search-input{width:100%;background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:14px 48px 14px 16px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none;transition:border-color 0.2s;}
+.search-input:focus{border-color:var(--amber);}
+.search-input::placeholder{color:var(--text-tertiary);}
+.search-icon{position:absolute;right:15px;top:50%;transform:translateY(-50%);color:var(--text-tertiary);pointer-events:none;}
+
+/* ── Suggestions ── */
+.suggestions{display:none;position:absolute;top:calc(100% + 7px);left:0;right:0;background:var(--surface2);border:0.5px solid var(--border2);border-radius:4px;overflow:hidden;z-index:50;box-shadow:0 8px 32px rgba(0,0,0,0.5);}
+.sug-item{padding:11px 16px;font-size:14px;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:background 0.1s;border-bottom:1px solid var(--border);}
+.sug-item:last-child{border-bottom:none;}
+.sug-item:hover,.sug-item.active{background:var(--surface);}
+.sug-item .hi{color:var(--amber);font-weight:500;}
+.sug-via{font-size:11px;color:#444;margin-left:6px;}
+.sug-ind{font-size:11px;color:var(--text-tertiary);flex-shrink:0;margin-left:12px;}
+
+/* ── Empty state ── */
+.empty{text-align:center;padding:4rem 0 2rem;}
+.empty-ico{font-size:30px;margin-bottom:1rem;opacity:0.3;}
+.empty-txt{font-size:14px;font-weight:300;line-height:1.7;color:var(--text-tertiary);}
+
+/* ── Result ── */
+.result-wrap{animation:fadeUp 0.3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.role-header{margin-bottom:1.25rem;}
+.role-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.03em;margin-bottom:4px;}
+.role-ind{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#0e0e0d;background:var(--amber);padding:3px 10px;border-radius:999px;}
+
+.divider{height:1px;background:var(--border);margin:1.25rem 0;}
+
+.sec-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:0.65rem;}
+
+.overview{font-size:14px;line-height:1.85;color:var(--text-secondary);font-weight:300;margin-bottom:1.75rem;}
+body:not(.dark) .overview{color:var(--text-secondary);}
+
+/* ── Keyword pills ── */
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.75rem;}
+.pill{font-size:12px;padding:5px 13px;background:var(--surface);border:0.5px solid var(--border2);border-radius:999px;color:var(--text);cursor:default;transition:border-color 0.15s,color 0.15s;}
+body:not(.dark) .pill{background:var(--surface2);color:#1a1a1a;}
+.pill:hover{border-color:var(--amber-dim);color:var(--amber);}
+
+/* ── Filter box ── */
+.filter-box{background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:1rem 1.25rem;margin-bottom:1.75rem;}
+.filter-opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:0.75rem;}
+.fbtn{font-size:13px;font-family:'DM Sans',sans-serif;font-weight:400;padding:5px 17px;background:var(--surface2);border:0.5px solid var(--border2);border-radius:999px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;line-height:1.5;}
+.fbtn:hover{border-color:var(--amber-dim);color:var(--text);background:#2c2c2c;}
+.fbtn.on{background:var(--amber);border-color:var(--amber);color:#0f0f0f;font-weight:500;}
+.fbtn.on:hover{background:var(--amber);border-color:var(--amber);color:#0f0f0f;opacity:0.88;}
+body:not(.dark) .fbtn{background:var(--surface2);border-color:var(--border2);color:var(--text-secondary);}
+body:not(.dark) .fbtn:hover{background:var(--surface);border-color:var(--amber-dim);color:var(--text);}
+body:not(.dark) .fbtn.on{background:var(--amber);border-color:var(--amber);color:#0f0f0f;}
+body:not(.dark) .fbtn.on:hover{background:var(--amber);border-color:var(--amber);color:#0f0f0f;opacity:0.88;}
+
+/* ── Boolean box ── */
+.bool-box{background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;overflow:hidden;}
+body:not(.dark) .bool-box{background:var(--bg);}
+.bool-head{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--surface2);}
+body:not(.dark) .bool-head{background:var(--surface2);}
+.bool-head-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#666;}
+body:not(.dark) .bool-head-label{color:var(--text-secondary);}
+.copy-btn{font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;padding:5px 16px;background:var(--amber);border:none;border-radius:999px;color:#0f0f0f;cursor:pointer;transition:opacity 0.15s;line-height:1.4;}
+.copy-btn:hover{opacity:0.85;}
+.bool-body{padding:1.1rem 1.25rem;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:2.1;word-break:break-word;color:#666;}
+body:not(.dark) .bool-body{color:var(--text-secondary);background:var(--bg);}
+.bool-body .t{color:var(--amber);}
+.bool-body .k{color:#c9a84c;}
+.bool-body .k2{color:var(--blue);}
+.bool-body .kt{color:#c9a84c;}
+.bool-body .op{color:var(--purple);font-weight:500;}
+
+/* ── Legend ── */
+.legend{display:flex;flex-wrap:wrap;gap:14px;padding:0.75rem 1.25rem;border-top:1px solid var(--border);background:#161616;}
+body:not(.dark) .legend{background:var(--surface2);}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-tertiary);}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* ── Keyword tabs ── */
+.kw-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:0;}
+.kw-tab{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;padding:9px 16px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-tertiary);cursor:pointer;font-family:'DM Sans',sans-serif;transition:color 0.15s,border-color 0.15s;margin-bottom:-1px;}
+.kw-tab.active{color:var(--amber);border-bottom-color:var(--amber);}
+.kw-tab:hover:not(.active){color:var(--text-secondary);}
+.kw-panel{display:none;padding-top:0.85rem;margin-bottom:1.75rem;}
+.kw-panel.active{display:block;}
+.tech-note{font-size:11px;color:var(--text-tertiary);margin-top:0.75rem;line-height:1.6;font-style:italic;}
+.bool-section{margin-top:1.25rem;}
+.bool-section-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:0.5rem;}
+
+/* ── Community modal ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:1.75rem;width:100%;max-width:480px;margin:1rem;}
+.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:0.35rem;color:var(--text);}
+.modal-sub{font-size:13px;color:var(--text-tertiary);margin-bottom:1.25rem;line-height:1.6;}
+.modal-type{display:flex;gap:8px;margin-bottom:1.25rem;}
+.mtype-btn{flex:1;font-size:12px;font-weight:500;font-family:'DM Sans',sans-serif;padding:8px 12px;background:var(--surface2);border:0.5px solid var(--border2);border-radius:4px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;text-align:center;}
+.mtype-btn.on{background:var(--amber);border-color:var(--amber);color:#0f0f0f;}
+.modal-field{margin-bottom:1rem;}
+.modal-label{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:0.4rem;display:block;}
+.modal-input,.modal-textarea{width:100%;background:var(--surface2);border:0.5px solid var(--border2);border-radius:4px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color 0.2s;resize:none;}
+.modal-input:focus,.modal-textarea:focus{border-color:var(--amber);}
+.modal-input::placeholder,.modal-textarea::placeholder{color:var(--text-tertiary);}
+.modal-textarea{min-height:80px;line-height:1.6;}
+.modal-note{font-size:11px;color:var(--text-tertiary);margin-bottom:1.25rem;line-height:1.6;}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;}
+.modal-cancel{font-size:13px;font-family:'DM Sans',sans-serif;padding:9px 20px;background:none;border:0.5px solid var(--border2);border-radius:2px;color:var(--text-secondary);cursor:pointer;transition:all 0.15s;}
+.modal-cancel:hover{border-color:var(--border2);color:var(--text);}
+.modal-submit{font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;padding:9px 20px;background:var(--amber);border:none;border-radius:999px;color:#0f0f0f;cursor:pointer;transition:opacity 0.15s;}
+.modal-submit:hover{opacity:0.85;}
+.modal-submit:disabled{opacity:0.4;cursor:not-allowed;}
+.modal-success{text-align:center;padding:1rem 0;}
+.modal-success-icon{font-size:28px;margin-bottom:0.75rem;}
+.modal-success-msg{font-size:14px;color:var(--text-secondary);line-height:1.7;}
+.suggest-link{font-size:11px;color:var(--text-tertiary);cursor:pointer;text-decoration:none;display:inline-block;margin-top:0.5rem;transition:color 0.15s;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;}
+.suggest-link:hover{color:var(--amber);}
+
+/* ── Demo toggle ── */
+.demo-trigger{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--text-tertiary);background:none;border:none;cursor:pointer;padding:0;margin-top:0.5rem;transition:color 0.15s;letter-spacing:0.03em;}
+.demo-trigger:hover{color:var(--amber);}
+.demo-trigger-icon{width:16px;height:16px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.demo-trigger-icon svg{width:6px;height:6px;fill:currentColor;margin-left:1px;}
+.demo-wrap{overflow:hidden;max-height:0;transition:max-height 0.35s ease,margin 0.35s ease;margin-bottom:0;}
+.demo-wrap.open{max-height:500px;margin-bottom:2.5rem;}
+.demo-thumb{display:block;position:relative;width:100%;margin-top:0.75rem;border-radius:4px;overflow:hidden;border:0.5px solid var(--border2);text-decoration:none;}
+.demo-thumb img{width:100%;display:block;opacity:0.85;transition:opacity 0.2s;}
+.demo-thumb:hover img{opacity:1;}
+.demo-thumb-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;background:rgba(0,0,0,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.demo-thumb:hover .demo-thumb-play{background:rgba(255,0,0,0.85);}
+.demo-thumb-play svg{width:20px;height:20px;fill:#fff;margin-left:3px;}
+.demo-thumb-label{position:absolute;bottom:0;left:0;right:0;padding:0.5rem 0.75rem;font-size:10px;font-family:'JetBrains Mono',monospace;color:rgba(255,255,255,0.6);background:linear-gradient(transparent,rgba(0,0,0,0.6));letter-spacing:0.04em;}
+
+
+/* ── Discovery empty-state ── */
+.discovery{animation:fadeUp 0.25s ease both;padding:0.25rem 0 1.5rem;}
+.discovery-intro{font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:1rem;}
+.ind-tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:1.5rem;}
+@media(min-width:500px){.ind-tiles{grid-template-columns:repeat(4,1fr);}}
+.ind-tile{background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;padding:14px 14px 12px;cursor:pointer;transition:border-color 0.15s,background 0.15s;text-align:left;}
+.ind-tile:hover{border-color:var(--amber-dim);background:var(--surface2);}
+body:not(.dark) .ind-tile{background:var(--surface2);}
+body:not(.dark) .ind-tile:hover{background:var(--surface);border-color:var(--amber-dim);}
+.ind-tile-icon{font-size:18px;margin-bottom:8px;line-height:1;}
+.ind-tile-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:-0.01em;color:var(--text);margin-bottom:4px;}
+.ind-tile-count{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--text-tertiary);}
+.discovery-footer-hint{font-size:11px;color:var(--text-tertiary);text-align:center;margin-top:0.5rem;}
+
+/* ── Role list (after industry click) ── */
+.role-list-panel{margin-top:0;}
+.role-list-header{display:flex;align-items:center;gap:12px;margin-bottom:0.75rem;}
+.role-list-back{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--text-tertiary);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;padding:0;transition:color 0.15s;flex-shrink:0;}
+.role-list-back:hover{color:var(--amber);}
+.role-list-back svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.role-list-heading{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;letter-spacing:-0.02em;margin:0;}
+.role-list-heading span{color:var(--amber);}
+.role-scroll{max-height:360px;overflow-y:auto;border:0.5px solid var(--border2);border-radius:4px;padding:8px;}
+.role-scroll::-webkit-scrollbar{width:4px;}
+.role-scroll::-webkit-scrollbar-track{background:transparent;}
+.role-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px;}
+.role-chip{background:transparent;border:0.5px solid var(--border2);border-radius:4px;padding:8px 13px;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:border-color 0.12s,color 0.12s,background 0.12s;text-align:left;width:100%;}
+.role-chip:hover{border-color:var(--amber-dim);color:var(--text);background:var(--surface);}
+body:not(.dark) .role-chip{background:var(--surface2);color:var(--text-secondary);}
+body:not(.dark) .role-chip:hover{background:var(--surface);border-color:var(--amber-dim);color:var(--text);}
+
+/* ── Footer ── */
+.footer{margin-top:3rem;padding-top:2rem;border-top:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:11px;color:var(--text-faint);letter-spacing:0.04em;}
+.footer a{color:var(--text-tertiary);text-decoration:none;border-bottom:0.5px solid var(--border2);}
+.footer a:hover{color:var(--amber);}
+.footer-right{display:flex;align-items:center;gap:8px;color:var(--text-faint);}
+.footer-right a{border:0.5px solid var(--border);padding:5px 12px;border-bottom:0.5px solid var(--border);color:var(--text-tertiary);text-decoration:none;letter-spacing:0.06em;}
+.footer-right a:hover{color:var(--text);border-color:var(--border2);}
+
+/* ── Skill full-page result ── */
+.skill-result-wrap{animation:fadeUp 0.3s ease both;}
+.skill-result-header{margin-bottom:1.25rem;}
+.skill-result-title{font-family:'Syne',sans-serif;font-size:26px;font-weight:700;letter-spacing:-0.03em;margin-bottom:4px;}
+.skill-result-cat{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#0e0e0d;background:var(--amber);padding:3px 10px;border-radius:999px;}
+.skill-result-brief{font-size:14px;line-height:1.85;color:var(--text-secondary);font-weight:300;margin-bottom:1.75rem;}
+body:not(.dark) .skill-result-brief{color:var(--text-secondary);}
+.skill-signal-pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.75rem;}
+.skill-signal-pill{font-size:12px;padding:5px 13px;background:var(--surface);border:0.5px solid var(--border2);border-radius:999px;color:var(--text);cursor:default;}
+body:not(.dark) .skill-signal-pill{background:var(--surface2);color:#1a1a1a;}
+
+/* ── Skill suggestion tag ── */
+.sug-skill-tag{font-size:11px;color:var(--amber);background:rgba(201,168,76,0.1);border:0.5px solid rgba(201,168,76,0.25);padding:2px 8px;border-radius:999px;flex-shrink:0;margin-left:12px;}
+
+/* ── Tech pill — skill-linked variant ── */
+.pill.skill-linked{cursor:pointer;border-color:var(--amber-dim);color:var(--amber);}
+.pill.skill-linked:hover{background:rgba(245,158,11,0.08);border-color:var(--amber);color:var(--amber);}
+body:not(.dark) .pill.skill-linked{background:rgba(160,120,40,0.08);border-color:var(--amber-dim);color:var(--amber);}
+body:not(.dark) .pill.skill-linked:hover{background:rgba(160,120,40,0.15);}
+
+/* ── Skill detail overlay ── */
+.skill-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:300;backdrop-filter:blur(3px);}
+.skill-overlay.open{display:flex;align-items:flex-start;justify-content:flex-end;}
+.skill-panel{width:480px;max-width:95vw;height:100vh;background:var(--surface);border-left:1px solid var(--border2);overflow-y:auto;display:flex;flex-direction:column;animation:skillSlideIn 0.22s ease;}
+@keyframes skillSlideIn{from{transform:translateX(32px);opacity:0;}to{transform:translateX(0);opacity:1;}}
+.skill-panel-head{padding:24px 24px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:10;}
+.skill-panel-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:4px;}
+.skill-panel-name{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;letter-spacing:-0.03em;color:var(--text);line-height:1.1;}
+.skill-panel-close{background:var(--surface2);border:0.5px solid var(--border2);border-radius:4px;color:var(--text-secondary);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0;margin-left:12px;transition:all 0.15s;}
+.skill-panel-close:hover{border-color:var(--amber);color:var(--amber);}
+.skill-panel-cat{display:inline-block;font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:#0f0f0f;background:var(--amber);padding:3px 10px;border-radius:999px;margin-bottom:12px;}
+.skill-panel-brief{font-size:13px;color:var(--text-secondary);line-height:1.7;font-weight:300;}
+.skill-panel-body{padding:20px 24px 40px;flex:1;}
+.skill-sec-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:0.6rem;}
+.skill-persona-pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1.5rem;}
+.skill-persona-pill{font-size:12px;padding:5px 13px;background:var(--surface2);border:1px solid var(--border2);border-radius:999px;color:var(--text);cursor:default;}
+.skill-bool-box{background:var(--surface);border:0.5px solid var(--border2);border-radius:4px;overflow:hidden;}
+body:not(.dark) .skill-bool-box{background:var(--bg);}
+.skill-bool-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface2);}
+body:not(.dark) .skill-bool-head{background:var(--surface2);}
+.skill-bool-label{font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#666;}
+body:not(.dark) .skill-bool-label{color:var(--text-secondary);}
+.skill-bool-body{padding:1rem 1.1rem;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:2;word-break:break-word;color:var(--amber);}
+body:not(.dark) .skill-bool-body{background:var(--bg);}
+.skill-copy-btn{font-size:12px;font-family:'DM Sans',sans-serif;font-weight:500;padding:5px 15px;background:var(--amber);border:none;border-radius:999px;color:#0f0f0f;cursor:pointer;transition:opacity 0.15s;line-height:1.4;}
+.skill-copy-btn:hover{opacity:0.85;}
+</style>
+</head>
+<body class="dark">
+
+<!-- Skill detail overlay (SkillLens panel) -->
+<div class="skill-overlay" id="skillOverlay">
+  <div class="skill-panel" id="skillPanel">
+    <div class="skill-panel-head">
+      <div class="skill-panel-top">
+        <div class="skill-panel-name" id="skillPanelName"></div>
+        <button class="skill-panel-close" id="skillPanelClose" title="Close">✕</button>
+      </div>
+      <div class="skill-panel-cat" id="skillPanelCat"></div>
+      <div class="skill-panel-brief" id="skillPanelBrief"></div>
+    </div>
+    <div class="skill-panel-body" id="skillPanelBody"></div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo" onclick="resetToHome()" title="Back to search">
+        <div class="logo-name">Signal<span>Scoper</span></div>
+      </div>
+      <div class="tagline">// Search by Skills, Spot by Persona</div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode" aria-label="Toggle theme">
+      <svg class="icon-moon" viewBox="0 0 24 24">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="5"/>
+        <line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+        <line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Demo -->
+  <button class="demo-trigger" onclick="toggleDemo()" id="demoTrigger">
+    <span class="demo-trigger-icon">
+      <svg viewBox="0 0 8 8"><polygon points="2,1 7,4 2,7"/></svg>
+    </span>
+    <span id="demoTriggerLabel">Watch demo</span>
+  </button>
+  <div class="demo-wrap" id="demoWrap">
+    <a class="demo-thumb" href="https://www.youtube.com/watch?v=AZbE_oIqk28" target="_blank">
+      <img src="https://img.youtube.com/vi/AZbE_oIqk28/maxresdefault.jpg" alt="SignalScoper demo" onerror="this.src='https://img.youtube.com/vi/AZbE_oIqk28/hqdefault.jpg'"/>
+      <div class="demo-thumb-play">
+        <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      </div>
+      <div class="demo-thumb-label">opens on YouTube · ~90 sec</div>
+    </a>
+  </div>
+
+  <!-- Search -->
+  <div class="search-label" style="margin-top:1.75rem;">Search a role</div>
+  <div class="search-wrap">
+    <input class="search-input" id="si" type="text"
+      placeholder="Try 'Python Developer', 'CRA', 'AML Analyst', 'Credit Analyst'..."
+      oninput="onInput(this.value)"
+      onkeydown="onKey(event)"
+      autocomplete="off" spellcheck="false"/>
+    <div class="search-icon">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="10.2" y1="10.2" x2="14" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="suggestions" id="sug"></div>
+  </div>
+
+  <!-- Result -->
+  <div id="result">
+    <div id="resultContent"></div>
+    <div id="roleListPanel" style="display:none;"></div>
+    <div id="discoveryState" class="discovery">
+      <div class="discovery-intro">228 roles across 4 industries — browse by industry</div>
+      <div class="ind-tiles">
+        <div class="ind-tile" onclick="showRoleList('Technology')">
+          <div class="ind-tile-icon">⚙</div>
+          <div class="ind-tile-name">Technology</div>
+          <div class="ind-tile-count" id="cnt-Technology">— roles</div>
+        </div>
+        <div class="ind-tile" onclick="showRoleList('BFSI')">
+          <div class="ind-tile-icon">₹</div>
+          <div class="ind-tile-name">BFSI</div>
+          <div class="ind-tile-count" id="cnt-BFSI">— roles</div>
+        </div>
+        <div class="ind-tile" onclick="showRoleList('Healthcare & Pharma')">
+          <div class="ind-tile-icon">✚</div>
+          <div class="ind-tile-name">Healthcare &amp; Pharma</div>
+          <div class="ind-tile-count" id="cnt-hcp">— roles</div>
+        </div>
+        <div class="ind-tile" onclick="showRoleList('Manufacturing & Engineering')">
+          <div class="ind-tile-icon">◈</div>
+          <div class="ind-tile-name">Manufacturing &amp; Engg</div>
+          <div class="ind-tile-count" id="cnt-mfg">— roles</div>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:0.5rem;">
+        <button class="suggest-link" onclick="openModal('role')">Don't see the role you're looking for? Submit a request →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Part of <a href="/">sourcer.club</a> &nbsp;·&nbsp; India-first &nbsp;·&nbsp; Free forever &nbsp;·&nbsp; &copy; 2026 Sourcer.club &nbsp;·&nbsp; <a href="https://github.com/Sourcer-Club/sourcer-club/blob/main/LICENSE" target="_blank">MIT License</a></span>
+    <div class="footer-right">
+      <a href="https://github.com/Sourcer-Club/sourcer-club/tree/main/signal" target="_blank">GitHub</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- Community Suggestions Modal -->
+<div class="modal-overlay" id="suggModal">
+  <div class="modal">
+    <div id="suggForm">
+      <div class="modal-title">Share your suggestion</div>
+      <div class="modal-sub">Help us grow SignalScoper. Every suggestion is reviewed.</div>
+      <div class="modal-type">
+        <button class="mtype-btn on" id="mtypeRole" onclick="setModalType('role')">New Role Request</button>
+        <button class="mtype-btn" id="mtypeKw" onclick="setModalType('kw')">Keyword Suggestion</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label" id="modalRoleLabel">Role Name</label>
+        <input class="modal-input" id="modalRole" type="text" placeholder="e.g. SAP FICO Consultant" autocomplete="off"/>
+      </div>
+      <div class="modal-field" id="modalSuggField">
+        <label class="modal-label" id="modalSuggLabel">Your Suggestion</label>
+        <textarea class="modal-textarea" id="modalSugg" placeholder="Describe the role or keyword you'd like added..."></textarea>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Email <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional — we'll notify you when it's added)</span></label>
+        <input class="modal-input" id="modalEmail" type="email" placeholder="your@email.com" autocomplete="off"/>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+        <button class="modal-submit" id="modalSubmitBtn" onclick="submitSuggestion()">Submit</button>
+      </div>
+    </div>
+    <div id="suggSuccess" class="modal-success" style="display:none;">
+      <div class="modal-success-icon">✓</div>
+      <div class="modal-success-msg">Thank you! Your suggestion has been received.<br>We review every submission and will be in touch if you left your email.</div>
+      <div style="margin-top:1.25rem;text-align:right;">
+        <button class="modal-cancel" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="roles.js"></script>
+<script>
+/* ── State ── */
+let filtered=[], activeIdx=-1, curRole=null, curFilter=null;
+
+/* ── Synonym map ── */
+function buildMap(){
+  const m={};
+  DATA.forEach(d=>{
+    m[d.role.toLowerCase()]=d;
+    d.synonyms.forEach(s=>{m[s.toLowerCase()]=d;});
+  });
+  return m;
+}
+const MAP=buildMap();
+
+/* ── Search ── */
+let _discoveryVisible = true;
+function onInput(v){
+  activeIdx=-1;
+  const q=v.trim().toLowerCase();
+  const el=document.getElementById('sug');
+  if(q && _discoveryVisible){
+    const ds=document.getElementById('discoveryState');
+    if(ds){
+      ds.style.transition='opacity 0.2s';
+      ds.style.opacity='0';
+      setTimeout(()=>{ if(ds.parentNode) ds.style.display='none'; },200);
+      _discoveryVisible=false;
+    }
+  }
+  if(!q){
+    const ds=document.getElementById('discoveryState');
+    if(!ds||ds.style.display==='none'){showDiscovery();_discoveryVisible=true;}
+    el.style.display='none';filtered=[];return;
+  }
+  const seen=new Set();
+  filtered=[];
+  // Role matches first
+  DATA.forEach(d=>{
+    [d.role,...d.synonyms].forEach(t=>{
+      if(t.toLowerCase().includes(q)&&!seen.has(d.role)){
+        seen.add(d.role);
+        filtered.push({d,matched:t,type:'role'});
+      }
+    });
+  });
+  // Skill matches after
+  const seenSkills=new Set();
+  skillsData.forEach(s=>{
+    if(s.name.toLowerCase().includes(q)&&!seenSkills.has(s.name)){
+      seenSkills.add(s.name);
+      filtered.push({skill:s,matched:s.name,type:'skill'});
+    }
+  });
+  if(!filtered.length){el.style.display='none';return;}
+  el.innerHTML=filtered.slice(0,9).map((f,i)=>{
+    const hl=f.matched.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi'),'<span class="hi">$1</span>');
+    if(f.type==='skill'){
+      return `<div class="sug-item" onmousedown="pick(${i})"><span>${hl}</span><span class="sug-skill-tag">${f.skill.category}</span></div>`;
+    }
+    const via=f.matched.toLowerCase()!==f.d.role.toLowerCase()
+      ?`<span class="sug-via">→ ${f.d.role}</span>`:'';
+    return `<div class="sug-item" onmousedown="pick(${i})"><span>${hl}${via}</span><span class="sug-ind">${f.d.industry}</span></div>`;
+  }).join('');
+  el.style.display='block';
+}
+
+function onKey(e){
+  const items=document.querySelectorAll('.sug-item');
+  if(e.key==='ArrowDown'){e.preventDefault();activeIdx=Math.min(activeIdx+1,items.length-1);hlItems(items);}
+  else if(e.key==='ArrowUp'){e.preventDefault();activeIdx=Math.max(activeIdx-1,0);hlItems(items);}
+  else if(e.key==='Enter'&&activeIdx>=0)pick(activeIdx);
+  else if(e.key==='Escape')document.getElementById('sug').style.display='none';
+}
+function hlItems(items){items.forEach((el,i)=>el.classList.toggle('active',i===activeIdx));}
+
+function pick(i){
+  if(!filtered[i])return;
+  const f=filtered[i];
+  document.getElementById('sug').style.display='none';
+  if(f.type==='skill'){
+    document.getElementById('si').value=f.skill.name;
+    curRole=null;
+    curFilter=null;
+    renderSkill(f.skill);
+  } else {
+    curRole=f.d;
+    curFilter=null;
+    document.getElementById('si').value=curRole.role;
+    render();
+  }
+}
+
+/* ── Render skill full page ── */
+function renderSkill(skill){
+  document.getElementById('discoveryState').style.display = 'none';
+  document.getElementById('roleListPanel').style.display = 'none';
+  _discoveryVisible = false;
+  const boolStr=skill.signals.map(s=>`"${s}"`).join(' OR ');
+  const boolFull=boolStr;
+  document.getElementById('resultContent').innerHTML=`
+    <div class="skill-result-wrap">
+      <div class="skill-result-header">
+        <div class="skill-result-title">${skill.name}</div>
+        <div style="margin-top:6px;"><span class="skill-result-cat">${skill.category}</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="sec-label">What this skill signals</div>
+      <div class="skill-result-brief">${skill.brief}</div>
+      <div class="sec-label">Persona Signals</div>
+      <div class="skill-signal-pills" style="margin-bottom:1.75rem;">
+        ${skill.persona.map(p=>`<span class="skill-signal-pill">${p}</span>`).join('')}
+      </div>
+      <div class="sec-label">Search Signals</div>
+      <div class="skill-signal-pills">
+        ${skill.signals.map(s=>`<span class="pill">${s}</span>`).join('')}
+      </div>
+      <div class="tech-note" style="margin-bottom:1.75rem;">These signals appear in candidate profiles when someone genuinely works with ${skill.name}. Use them to find people others miss.</div>
+      <div class="bool-section">
+        <div class="bool-section-label">Boolean String</div>
+        <div class="bool-box">
+          <div class="bool-head">
+            <div class="bool-head-label">Search Signals — Boolean</div>
+            <button class="copy-btn" onclick="copySkillPageBool()">Copy</button>
+          </div>
+          <div class="bool-body" id="skillPageBoolBody" data-full="${boolFull.replace(/"/g,'&quot;')}">${skill.signals.map(s=>`<span class="k">"${s}"</span>`).join(' <span class="op">OR</span> ')}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ── Filter ── */
+let curBackend=null, curFrontend=null;
+
+function toggleFilter(name){
+  curFilter=curFilter===name?null:name;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.toggle('on',b.dataset.n===curFilter));
+  refreshBool();
+  if(curRole&&curRole.tech_kws) refreshTechBool();
+}
+
+function toggleDualFilter(name,group){
+  if(group==='backend') curBackend=curBackend===name?null:name;
+  else curFrontend=curFrontend===name?null:name;
+  document.querySelectorAll('.fbtn-be').forEach(b=>b.classList.toggle('on',b.dataset.n===curBackend));
+  document.querySelectorAll('.fbtn-fe').forEach(b=>b.classList.toggle('on',b.dataset.n===curFrontend));
+  refreshBool();
+  if(curRole&&curRole.tech_kws) refreshTechBool();
+}
+
+/* ── Boolean builder ── */
+function buildBool(){
+  const r=curRole;
+  let titles, persona_kws=null;
+
+  if(r.filter_dual){
+    // Dual filter mode (Full Stack Developer)
+    const be=r.filter_dual.backend.find(o=>o.name===curBackend);
+    const fe=r.filter_dual.frontend.find(o=>o.name===curFrontend);
+    if(be&&fe){
+      // Both selected — intersect titles, merge persona_kws
+      const beTitles=new Set(be.titles);
+      const combined=fe.titles.filter(t=>beTitles.has(t));
+      titles=(combined.length?combined:r.base_titles).map(t=>`"${t}"`).join(' OR ');
+    } else if(be){
+      titles=be.titles.map(t=>`"${t}"`).join(' OR ');
+    } else if(fe){
+      titles=fe.titles.map(t=>`"${t}"`).join(' OR ');
+    } else {
+      titles=r.base_titles.map(t=>`"${t}"`).join(' OR ');
+    }
+    const pkwParts=[];
+    if(be&&be.persona_kws&&be.persona_kws.length) pkwParts.push(...be.persona_kws);
+    if(fe&&fe.persona_kws&&fe.persona_kws.length) pkwParts.push(...fe.persona_kws);
+    if(pkwParts.length) persona_kws=[...new Set(pkwParts)].map(k=>k.includes(' ')?`"${k}"`:k).join(' OR ');
+  } else if(curFilter&&r.filter){
+    const opt=r.filter.options.find(o=>o.name===curFilter);
+    if(opt){
+      titles=opt.titles.map(t=>`"${t}"`).join(' OR ');
+      if(opt.persona_kws&&opt.persona_kws.length){
+        persona_kws=opt.persona_kws.map(k=>k.includes(' ')?`"${k}"`:k).join(' OR ');
+      }
+    } else {
+      titles=r.base_titles.map(t=>`"${t}"`).join(' OR ');
+    }
+  } else {
+    titles=r.base_titles.map(t=>`"${t}"`).join(' OR ');
+  }
+  const core_kws=r.base_kws.map(k=>k.includes(' ')?`"${k}"`:k).join(' OR ');
+  return{titles,core_kws,persona_kws};
+}
+
+function refreshBool(){
+  const body=document.getElementById('boolBody');
+  if(!body)return;
+  const{titles,core_kws,persona_kws}=buildBool();
+  let full,html;
+  if(persona_kws){
+    full=`(${titles}) AND (${core_kws}) AND (${persona_kws})`;
+    html=
+      `<span class="op">(</span><span class="t">${titles}</span><span class="op">)</span><br>`+
+      `<span class="op">AND&nbsp;(</span><span class="k">${core_kws}</span><span class="op">)</span><br>`+
+      `<span class="op">AND&nbsp;(</span><span class="k2">${persona_kws}</span><span class="op">)</span>`;
+  } else {
+    full=`(${titles}) AND (${core_kws})`;
+    html=
+      `<span class="op">(</span><span class="t">${titles}</span><span class="op">)</span><br>`+
+      `<span class="op">AND&nbsp;(</span><span class="k">${core_kws}</span><span class="op">)</span>`;
+  }
+  body.dataset.full=full;
+  body.innerHTML=html;
+}
+
+/* ── Render result ── */
+function render(){
+  const r=curRole;
+  curBackend=null; curFrontend=null;
+  const filterHtml=r.filter_dual?`
+    <div class="filter-box">
+      <div class="sec-label" style="margin-bottom:0.5rem;">${r.filter_dual.backend_label}</div>
+      <div class="filter-opts" style="margin-bottom:0.75rem;">
+        ${r.filter_dual.backend.map(o=>`<button class="fbtn fbtn-be" data-n="${o.name}" onclick="toggleDualFilter('${o.name}','backend')">${o.name}</button>`).join('')}
+      </div>
+      <div class="sec-label" style="margin-bottom:0.5rem;">${r.filter_dual.frontend_label}</div>
+      <div class="filter-opts">
+        ${r.filter_dual.frontend.map(o=>`<button class="fbtn fbtn-fe" data-n="${o.name}" onclick="toggleDualFilter('${o.name}','frontend')">${o.name}</button>`).join('')}
+      </div>
+    </div>`:r.filter?`
+    <div class="filter-box">
+      <div class="sec-label">${r.filter.label}</div>
+      <div class="filter-opts">
+        ${r.filter.options.map(o=>`<button class="fbtn" data-n="${o.name}" onclick="toggleFilter('${o.name}')">${o.name}</button>`).join('')}
+      </div>
+    </div>`:'';
+
+  const legendHtml=`
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Title variations</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#c9a84c"></div>Persona signals</div>
+      ${r.filter&&r.filter.options.some(o=>o.persona_kws&&o.persona_kws.length)?`<div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Filter-specific persona</div>`:''}
+    </div>`;
+
+  const hasTech = r.tech_kws && r.tech_kws.length > 0;
+
+  const personaBoolBox = `
+    <div class="bool-box" id="personaBoolBox">
+      <div class="bool-head">
+        <div class="bool-head-label">${hasTech ? 'Persona Signals — Boolean' : 'Boolean String'}</div>
+        <button class="copy-btn" onclick="copyBool()">Copy</button>
+      </div>
+      <div class="bool-body" id="boolBody"></div>
+      ${legendHtml}
+    </div>`;
+
+  const techBoolBox = hasTech ? `
+    <div class="bool-box" id="techBoolBox" style="display:none;">
+      <div class="bool-head">
+        <div class="bool-head-label">Technical Signals — Boolean</div>
+        <button class="copy-btn" onclick="copyTechBool()">Copy</button>
+      </div>
+      <div class="bool-body" id="techBoolBody"></div>
+      <div class="legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>Title variations</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#c9a84c"></div>Technical signals</div>
+        ${r.filter?`<div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Filter-specific keywords</div>`:''}
+      </div>
+    </div>` : '';
+
+  const kwTabsHtml = hasTech ? `
+    <div class="kw-tabs">
+      <button class="kw-tab active" id="tabPersona" onclick="switchKwTab('persona')">Persona Signals</button>
+      <button class="kw-tab" id="tabTech" onclick="switchKwTab('tech')">Technical Signals</button>
+    </div>
+    <div class="kw-panel active" id="panelPersona">
+      <div class="pills">${r.keywords.map(k=>`<span class="pill">${k}</span>`).join('')}</div>
+    </div>
+    <div class="kw-panel" id="panelTech">
+      <div class="pills">${r.tech_kws.map(k=>{const has=skillsData.some(s=>s.name.toLowerCase()===k.toLowerCase());return has?`<span class="pill skill-linked" onclick="openSkillPanel('${k.replace(/'/g,"\\'")}') " title="View skill profile">${k}</span>`:`<span class="pill">${k}</span>`;}).join('')}</div>
+      <div class="tech-note">These are the tools and technologies characteristic of this role. Use these to sharpen your search — but candidates who surface only through Persona Signals are the ones your competition is missing.</div>
+    </div>` : `
+    <div class="sec-label">Persona Signals</div>
+    <div class="pills">${r.keywords.map(k=>`<span class="pill">${k}</span>`).join('')}</div>`;
+
+  document.getElementById('resultContent').innerHTML=`
+    <div class="result-wrap">
+      <div class="role-header">
+        <div class="role-title">${r.role}</div>
+        <div style="margin-top:6px;"><span class="role-ind">${r.industry}</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="sec-label">Role Overview</div>
+      <div class="overview">${r.overview}</div>
+      ${kwTabsHtml}
+      <button class="suggest-link" onclick="openModal('kw','${r.role}')">+ Suggest a keyword for this role</button>
+      ${filterHtml}
+      ${personaBoolBox}
+      ${techBoolBox}
+    </div>`;
+  refreshBool();
+  if(hasTech) refreshTechBool();
+}
+
+/* ── Tab switch ── */
+function switchKwTab(tab){
+  document.getElementById('panelPersona').classList.toggle('active', tab==='persona');
+  document.getElementById('panelTech').classList.toggle('active', tab==='tech');
+  document.getElementById('tabPersona').classList.toggle('active', tab==='persona');
+  document.getElementById('tabTech').classList.toggle('active', tab==='tech');
+  const personaBool = document.getElementById('personaBoolBox');
+  const techBool = document.getElementById('techBoolBox');
+  if(personaBool) personaBool.style.display = tab==='persona' ? 'block' : 'none';
+  if(techBool) techBool.style.display = tab==='tech' ? 'block' : 'none';
+}
+
+/* ── Tech Boolean ── */
+function refreshTechBool(){
+  const body=document.getElementById('techBoolBody');
+  if(!body||!curRole||!curRole.tech_kws) return;
+  const r=curRole;
+
+  if(r.filter_dual){
+    // Dual filter — combine kws from backend and frontend selections
+    const be=r.filter_dual.backend.find(o=>o.name===curBackend);
+    const fe=r.filter_dual.frontend.find(o=>o.name===curFrontend);
+    if(!be&&!fe){
+      // No selection — show full tech_kws
+      const titles=r.base_titles.map(t=>`"${t}"`).join(' OR ');
+      const techKws=r.tech_kws.map(k=>k.includes(' ')?`"${k}"`:k).join(' OR ');
+      body.dataset.full=`(${titles}) AND (${techKws})`;
+      body.innerHTML=`<span class="op">(</span><span class="t">${titles}</span><span class="op">)</span><br><span class="op">AND&nbsp;(</span><span class="kt">${techKws}</span><span class="op">)</span>`;
+      return;
+    }
+    const beTitles=be?new Set(be.titles):null;
+    const feTitles=fe?new Set(fe.titles):null;
+    let combinedTitles;
+    if(be&&fe){
+      const inter=fe.titles.filter(t=>beTitles.has(t));
+      combinedTitles=(inter.length?inter:r.base_titles).map(t=>`"${t}"`).join(' OR ');
+    } else {
+      combinedTitles=(be||fe).titles.map(t=>`"${t}"`).join(' OR ');
+    }
+    const kwParts=[];
+    if(be) kwParts.push(...be.kws);
+    if(fe) kwParts.push(...fe.kws);
+    const filterKws=[...new Set(kwParts)].map(k=>k.includes(' ')?`"${k}"`:k).join(' OR ');
+    const full=`(${combinedTitles}) AND (${filterKws})`;
+    body.dataset.full=full;
+    body.innerHTML=`<span class="op">(</span><span class="t">${combinedTitles}</span><span class="op">)</span><br><span class="op">AND&nbsp;(</span><span class="kt">${filterKws}</span><span class="op">)</span>`;
+  } else if(r.filter&&curFilter){
+    const opt=r.filter.options.find(o=>o.name===curFilter);
+    if(!opt) return;
+    const titles=opt.titles.map(t=>`"${t}"`).join(' OR ');
+    const filterKws=opt.kws.map(k=>k.includes(' ')?`"${k}"`:k).join(' OR ');
+    const full=`(${titles}) AND (${filterKws})`;
+    const html=
+      `<span class="op">(</span><span class="t">${titles}</span><span class="op">)</span><br>`+
+      `<span class="op">AND&nbsp;(</span><span class="kt">${filterKws}</span><span class="op">)</span>`;
+    body.dataset.full=full;
+    body.innerHTML=html;
+  } else {
+    const titles=r.base_titles.map(t=>`"${t}"`).join(' OR ');
+    const techKws=r.tech_kws.map(k=>k.includes(' ')?`"${k}"`:k).join(' OR ');
+    const full=`(${titles}) AND (${techKws})`;
+    const html=
+      `<span class="op">(</span><span class="t">${titles}</span><span class="op">)</span><br>`+
+      `<span class="op">AND&nbsp;(</span><span class="kt">${techKws}</span><span class="op">)</span>`;
+    body.dataset.full=full;
+    body.innerHTML=html;
+  }
+}
+
+/* ── Copy ── */
+function copyBool(){
+  const full=document.getElementById('boolBody')?.dataset.full||'';
+  navigator.clipboard.writeText(full).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    if(!btn)return;
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+function copyTechBool(){
+  const full=document.getElementById('techBoolBody')?.dataset.full||'';
+  navigator.clipboard.writeText(full).then(()=>{
+    const btns=document.querySelectorAll('.copy-btn');
+    const btn=btns[btns.length-1];
+    if(!btn)return;
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+function copySkillPageBool(){
+  const full=document.getElementById('skillPageBoolBody')?.dataset.full||'';
+  navigator.clipboard.writeText(full).then(()=>{
+    const btns=document.querySelectorAll('.copy-btn');
+    const btn=[...btns].find(b=>b.getAttribute('onclick')==='copySkillPageBool()');
+    if(!btn)return;
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+/* ── Close suggestions on outside click ── */
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.search-wrap'))
+    document.getElementById('sug').style.display='none';
+});
+
+/* ── Community Modal ── */
+const FORM_URL='https://docs.google.com/forms/d/e/1FAIpQLSe8oWLvmVkJ8FtCVVawuJy0MMbXAyHAEzLRqz7cmxKtkJCTnQ/formResponse';
+let modalType='role';
+
+function openModal(type, prefillRole){
+  modalType = type || 'role';
+  setModalType(modalType);
+  if(prefillRole) document.getElementById('modalRole').value = prefillRole;
+  document.getElementById('suggSuccess').style.display='none';
+  document.getElementById('suggForm').style.display='block';
+  document.getElementById('suggModal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('suggModal').classList.remove('open');
+  document.getElementById('modalRole').value='';
+  document.getElementById('modalSugg').value='';
+  document.getElementById('modalEmail').value='';
+  document.getElementById('suggSuccess').style.display='none';
+  document.getElementById('suggForm').style.display='block';
+}
+
+function setModalType(type){
+  modalType=type;
+  document.getElementById('mtypeRole').classList.toggle('on', type==='role');
+  document.getElementById('mtypeKw').classList.toggle('on', type==='kw');
+  if(type==='role'){
+    document.getElementById('modalRoleLabel').textContent='Role Name';
+    document.getElementById('modalRole').placeholder='e.g. SAP FICO Consultant';
+    document.getElementById('modalSuggLabel').textContent='Any context? (optional)';
+    document.getElementById('modalSugg').placeholder='Tell us about the role or where you typically search for them...';
+  } else {
+    document.getElementById('modalRoleLabel').textContent='Which role?';
+    document.getElementById('modalRole').placeholder='e.g. Data Engineer';
+    document.getElementById('modalSuggLabel').textContent='Keyword(s) to add';
+    document.getElementById('modalSugg').placeholder='e.g. lakehouse, data mesh, dbt Cloud...';
+  }
+}
+
+function submitSuggestion(){
+  const role=document.getElementById('modalRole').value.trim();
+  const sugg=document.getElementById('modalSugg').value.trim();
+  const email=document.getElementById('modalEmail').value.trim();
+  if(!role){document.getElementById('modalRole').focus();return;}
+  const btn=document.getElementById('modalSubmitBtn');
+  btn.disabled=true;
+  btn.textContent='Sending...';
+  const typeVal=modalType==='role'?'New Role Request':'Keyword Suggestion';
+  const fd=new FormData();
+  fd.append('entry.2131916568', typeVal);
+  fd.append('entry.494310014', role);
+  fd.append('entry.273968474', sugg);
+  fd.append('entry.354448516', email);
+  fetch(FORM_URL,{method:'POST',body:fd,mode:'no-cors'})
+    .then(()=>{
+      document.getElementById('suggForm').style.display='none';
+      document.getElementById('suggSuccess').style.display='block';
+    })
+    .catch(()=>{
+      document.getElementById('suggForm').style.display='none';
+      document.getElementById('suggSuccess').style.display='block';
+    })
+    .finally(()=>{btn.disabled=false;btn.textContent='Submit';});
+}
+
+/* ── Theme toggle ── */
+(function(){
+  const saved = localStorage.getItem('sl-theme');
+  if(saved === 'light') document.body.classList.remove('dark');
+})();
+
+function toggleDemo(){
+  const wrap = document.getElementById('demoWrap');
+  const label = document.getElementById('demoTriggerLabel');
+  const isOpen = wrap.classList.toggle('open');
+  label.textContent = isOpen ? 'Hide demo' : 'Watch demo';
+}
+
+function toggleTheme(){
+  const isDark = document.body.classList.contains('dark');
+  if(isDark){
+    document.body.classList.remove('dark');
+    localStorage.setItem('sl-theme','light');
+  } else {
+    document.body.classList.add('dark');
+    localStorage.setItem('sl-theme','dark');
+  }
+}
+
+/* ── Discovery empty-state ── */
+const IND_META = {
+  'Technology':               { icon:'⚙',  label:'Technology',          cntId:'cnt-Technology' },
+  'BFSI':                     { icon:'₹',  label:'BFSI',                cntId:'cnt-BFSI' },
+  'Healthcare & Pharma':      { icon:'✚', label:'Healthcare & Pharma',  cntId:'cnt-hcp' },
+  'Manufacturing & Engineering':{ icon:'◈', label:'Manufacturing & Engg', cntId:'cnt-mfg' }
+};
+
+function buildDiscovery(){
+  // populate counts from DATA
+  const counts = {};
+  DATA.forEach(d => { counts[d.industry] = (counts[d.industry]||0) + 1; });
+  Object.keys(IND_META).forEach(ind => {
+    const el = document.getElementById(IND_META[ind].cntId);
+    if(el) el.textContent = (counts[ind]||0) + ' roles';
+  });
+}
+
+function showDiscovery(){
+  document.getElementById('resultContent').innerHTML = '';
+  document.getElementById('roleListPanel').style.display = 'none';
+  document.getElementById('roleListPanel').innerHTML = '';
+  const ds = document.getElementById('discoveryState');
+  ds.style.display = '';
+  ds.style.opacity = '1';
+  _discoveryVisible = true;
+  buildDiscovery();
+}
+
+function showRoleList(industry){
+  const roles = DATA.filter(d => d.industry === industry).map(d => d.role).sort();
+  const displayName = industry === 'Healthcare & Pharma' ? 'Healthcare &amp; Pharma'
+    : industry === 'Manufacturing & Engineering' ? 'Manufacturing &amp; Engineering'
+    : industry;
+  // Hide discovery, clear result content
+  document.getElementById('discoveryState').style.display = 'none';
+  document.getElementById('resultContent').innerHTML = '';
+  _discoveryVisible = false;
+  // Show fixed-height scrollable role list
+  const panel = document.getElementById('roleListPanel');
+  panel.style.display = 'block';
+  panel.innerHTML = `
+    <div class="role-list-panel">
+      <div class="role-list-header">
+        <button class="role-list-back" onclick="showDiscovery()">
+          <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+          All industries
+        </button>
+        <div class="role-list-heading"><span>${displayName}</span> — ${roles.length} roles</div>
+      </div>
+      <div class="role-scroll">
+        <div class="role-grid">
+          ${roles.map(r => `<button class="role-chip" data-role="${r}">${r}</button>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+function selectRoleByName(roleName){
+  const d = DATA.find(r => r.role === roleName);
+  if(!d) return;
+  _discoveryVisible = false;
+  curRole = d;
+  curFilter = null;
+  document.getElementById('si').value = roleName;
+  document.getElementById('sug').style.display = 'none';
+  // Hide role list panel, render into resultContent
+  document.getElementById('roleListPanel').style.display = 'none';
+  render();
+  // Scroll to top of result area
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ── Reset to home ── */
+function resetToHome(){
+  curRole=null;
+  curFilter=null;
+  document.getElementById('si').value='';
+  document.getElementById('sug').style.display='none';
+  _discoveryVisible=true;
+  showDiscovery();
+}
+
+/* ── Skill Panel ── */
+function openSkillPanel(name){
+  const skill=skillsData.find(s=>s.name.toLowerCase()===name.toLowerCase());
+  if(!skill) return;
+  document.getElementById('skillPanelName').textContent=skill.name;
+  document.getElementById('skillPanelCat').textContent=skill.category;
+  document.getElementById('skillPanelBrief').textContent=skill.brief;
+  const boolStr=skill.signals.map(s=>`"${s}"`).join(' OR ');
+  document.getElementById('skillPanelBody').innerHTML=`
+    <div class="skill-sec-label" style="margin-bottom:0.6rem;">What this person does</div>
+    <div class="skill-persona-pills">${skill.persona.map(p=>`<span class="skill-persona-pill">${p}</span>`).join('')}</div>
+    <div class="skill-sec-label" style="margin-top:0.25rem;">Search signals — Boolean ready</div>
+    <div class="skill-bool-box">
+      <div class="skill-bool-head">
+        <span class="skill-bool-label">Boolean String</span>
+        <button class="skill-copy-btn" id="skillCopyBtn" onclick="copySkillBool()">Copy</button>
+      </div>
+      <div class="skill-bool-body" id="skillBoolStr">${boolStr}</div>
+    </div>
+    <div class="tech-note" style="margin-top:0.75rem;">Paste directly into Naukri, LinkedIn, or any Boolean search field.</div>`;
+  document.getElementById('skillOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+
+function closeSkillPanel(){
+  document.getElementById('skillOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+function copySkillBool(){
+  const str=document.getElementById('skillBoolStr')?.textContent||'';
+  navigator.clipboard.writeText(str).then(()=>{
+    const btn=document.getElementById('skillCopyBtn');
+    if(!btn) return;
+    btn.textContent='Copied!';
+    setTimeout(()=>btn.textContent='Copy',2000);
+  });
+}
+
+document.getElementById('skillPanelClose').addEventListener('click',closeSkillPanel);
+document.getElementById('skillOverlay').addEventListener('click',e=>{
+  if(e.target===document.getElementById('skillOverlay')) closeSkillPanel();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&document.getElementById('skillOverlay').classList.contains('open')) closeSkillPanel();
+});
+
+// Role chip click delegation
+document.getElementById('roleListPanel').addEventListener('click', e => {
+  const chip = e.target.closest('.role-chip');
+  if(!chip) return;
+  const roleName = chip.dataset.role;
+  if(!roleName) return;
+  const d = DATA.find(r => r.role === roleName);
+  if(!d) return;
+  _discoveryVisible = false;
+  curRole = d;
+  curFilter = null;
+  document.getElementById('si').value = roleName;
+  document.getElementById('sug').style.display = 'none';
+  document.getElementById('roleListPanel').style.display = 'none';
+  render();
+  document.getElementById('result').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+// Close modal on overlay click
+document.getElementById('suggModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('suggModal')) closeModal();
+});
+
+// Initialise discovery counts on page load
+buildDiscovery();
+</script>
+</body>
+</html>
