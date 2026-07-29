@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ReputeScoper – Stack Overflow Search by City | Sourcer.club</title>
+<meta name="description" content="Find Indian tech talent on Stack Overflow. Search 322,000 developer profiles by city, reputation, tags and expertise. Free tool by Sourcer.club."/>
+<meta name="author" content="Sourcer.club"/>
+<meta property="og:title" content="ReputeScoper by Sourcer.club"/>
+<meta property="og:description" content="LinkedIn has profiles. Stack Overflow has proof. Search 322k Indian developers by city, reputation and expertise — free and open source."/>
+<link rel="canonical" href="https://sourcer.club/repute/"/>
+<meta property="og:url" content="https://sourcer.club/repute/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="https://res.cloudinary.com/dcs7kqmmu/image/upload/v1778226984/Repute_-_Twitter_OG_Image_ehjra8.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://res.cloudinary.com/dcs7kqmmu/image/upload/v1778226984/Repute_-_Twitter_OG_Image_ehjra8.png"/>
+<meta name="twitter:title" content="ReputeScoper by Sourcer.club"/>
+<meta name="twitter:description" content="LinkedIn has profiles. Stack Overflow has proof. Search 322k Indian developers by city, reputation and expertise — free and open source."/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23f48024'/><text x='16' y='23' font-family='sans-serif' font-weight='800' font-size='20' fill='%230a0c10' text-anchor='middle'>R</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#f4f4f0;--surface:#fff;--card:#fff;--border:#e2e0d8;
+  --accent:#f48024;--accent2:#7c3aed;--green:#16a34a;--yellow:#d97706;
+  --red:#dc2626;--text:#1a1a1a;--muted:#6b7280;
+  --font-head:'Syne',sans-serif;--font-mono:'JetBrains Mono',monospace;
+  --shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+body.dark {
+  --bg:#0a0c10;--surface:#111318;--card:#161a22;--border:#1e2430;
+  --accent:#f48024;--accent2:#7c3aed;--green:#22c55e;--yellow:#f59e0b;
+  --red:#ef4444;--text:#e2e8f0;--muted:#64748b;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-head);min-height:100vh;}
+header{border-bottom:1px solid var(--border);padding:18px 32px;display:flex;align-items:center;gap:16px;background:var(--surface);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);box-shadow:var(--shadow);}
+.logo{font-size:22px;font-weight:800;letter-spacing:-0.5px;color:var(--accent);}
+.logo span{color:var(--text);}
+.tagline{font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-left:auto;}
+.theme-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:5px 8px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent);}
+.theme-btn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.icon-sun,.icon-moon{display:none;}
+body:not(.dark) .icon-moon{display:block;}
+body.dark .icon-sun{display:block;}
+
+.token-bar{margin:12px 32px;padding:10px 16px;border-radius:10px;background:rgba(244,128,36,0.07);border:1px solid rgba(244,128,36,0.25);font-size:12px;font-family:var(--font-mono);color:var(--yellow);display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.token-bar.valid{background:rgba(34,197,94,0.07);border-color:rgba(34,197,94,0.3);color:var(--green);}
+.token-bar.invalid{background:rgba(239,68,68,0.07);border-color:rgba(239,68,68,0.3);color:var(--red);}
+.token-bar a{color:var(--accent);}
+.token-msg{flex:1;min-width:160px;}
+.token-wrap{display:flex;gap:8px;align-items:center;}
+.token-wrap input{font-size:11px;padding:6px 10px;width:240px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);border-radius:6px;outline:none;}
+.btn-token{padding:6px 14px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-head);}
+.btn-token:disabled{opacity:0.5;cursor:not-allowed;}
+.btn-token-remove{padding:6px 12px;background:none;color:var(--muted);border:1px solid var(--border);border-radius:6px;font-size:11px;cursor:pointer;}
+.token-quota{font-size:10px;opacity:0.75;}
+
+.data-notice{margin:0 32px 8px;padding:8px 16px;border-radius:8px;background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.2);font-size:11px;font-family:var(--font-mono);color:#a78bfa;flex-wrap:wrap;}
+
+.search-section{padding:20px 32px 16px;background:var(--surface);border-bottom:1px solid var(--border);}
+.search-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;}
+.input-wrap{position:relative;flex:1;min-width:130px;}
+.input-wrap label{display:block;font-size:10px;font-family:var(--font-mono);color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+input:not([type=checkbox]):not([type=radio]),select{width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:13px;padding:10px 14px;border-radius:8px;outline:none;transition:border-color 0.2s;}
+input:not([type=checkbox]):not([type=radio]):focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(244,128,36,0.1);}
+select option{background:var(--surface);}
+.btn-search{padding:10px 28px;background:var(--accent);color:#fff;font-family:var(--font-head);font-weight:700;font-size:13px;border:none;border-radius:8px;cursor:pointer;white-space:nowrap;align-self:flex-end;transition:background 0.15s,transform 0.1s;}
+.btn-search:hover{background:#f59132;transform:translateY(-1px);}
+.btn-search:disabled{background:var(--muted);cursor:not-allowed;transform:none;}
+
+.filter-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;}
+.badge-filter{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:11px;font-family:var(--font-mono);}
+.badge-filter label{color:var(--muted);}
+.badge-filter input[type=number]{width:48px;padding:4px 6px;font-size:11px;}
+.gold-icon{color:#fbbf24;} .silver-icon{color:#94a3b8;} .bronze-icon{color:#b45309;}
+.city-opt{display:flex !important;align-items:center !important;gap:10px;padding:8px 10px;border-radius:6px;cursor:pointer;font-family:var(--font-head) !important;font-size:13px !important;font-weight:400;color:var(--text);white-space:nowrap;transition:background 0.15s;text-transform:none !important;letter-spacing:normal !important;margin-bottom:0 !important;line-height:1 !important;}
+.city-opt:hover{background:rgba(244,128,36,0.07);}
+.city-opt input[type=checkbox]{accent-color:var(--accent);width:15px !important;height:15px !important;flex-shrink:0;cursor:pointer;margin:0 !important;padding:0 !important;display:inline-block !important;vertical-align:middle;position:relative;top:0;}
+.city-opt span{flex:1;text-transform:none !important;letter-spacing:normal !important;vertical-align:middle;}
+.toggle-wrap{display:flex;align-items:center;gap:8px;font-size:12px;font-family:var(--font-mono);color:var(--muted);cursor:pointer;user-select:none;}
+.toggle{width:36px;height:20px;background:var(--border);border-radius:20px;position:relative;transition:background 0.2s;flex-shrink:0;}
+.toggle.on{background:var(--accent);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;background:#fff;border-radius:50%;transition:transform 0.2s;}
+.toggle.on::after{transform:translateX(16px);}
+.search-hint{font-size:10px;font-family:var(--font-mono);color:var(--muted);}
+.search-hint span{color:var(--accent);}
+
+.status-bar{padding:10px 32px;display:flex;align-items:center;gap:10px;font-size:12px;font-family:var(--font-mono);color:var(--muted);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.status-bar .count{color:var(--accent);font-weight:500;}
+.query-tag{background:var(--surface);border:1px solid var(--border);padding:2px 10px;border-radius:20px;color:var(--text);font-size:11px;}
+.rate-badge{margin-left:auto;padding:2px 10px;border-radius:20px;font-size:11px;border:1px solid var(--border);}
+.rate-ok{border-color:rgba(34,197,94,0.3);color:var(--green);}
+.rate-warn{border-color:rgba(245,158,11,0.3);color:var(--yellow);}
+
+.grid-container{padding:20px 32px;}
+.dev-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+
+.dev-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;position:relative;overflow:hidden;}
+.dev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity 0.2s;}
+.dev-card:hover{border-color:rgba(244,128,36,0.3);transform:translateY(-2px);box-shadow:var(--shadow);}
+.dev-card:hover::before{opacity:1;}
+.rank-badge{position:absolute;top:12px;right:12px;font-size:10px;font-family:var(--font-mono);background:var(--surface);border:1px solid var(--border);padding:2px 8px;border-radius:20px;color:var(--muted);}
+.score-label{position:absolute;top:32px;right:12px;font-size:10px;font-family:var(--font-mono);}
+
+.card-top{display:flex;gap:12px;align-items:flex-start;}
+.avatar{width:52px;height:52px;border-radius:10px;border:2px solid var(--border);flex-shrink:0;background:var(--surface);object-fit:cover;}
+.avatar-ph{width:52px;height:52px;border-radius:10px;border:2px solid var(--border);flex-shrink:0;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:22px;}
+.card-identity{flex:1;min-width:0;}
+.dev-name{font-size:15px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dev-sub{font-size:11px;font-family:var(--font-mono);color:var(--muted);margin-top:2px;}
+.rep-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(244,128,36,0.1);border:1px solid rgba(244,128,36,0.25);color:var(--accent);font-size:11px;font-family:var(--font-mono);padding:2px 8px;border-radius:20px;margin-top:4px;}
+.dev-bio{font-size:11px;color:var(--muted);line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-family:var(--font-mono);}
+
+.tags-row{display:flex;gap:5px;flex-wrap:wrap;min-height:24px;}
+.tag-chip{background:var(--surface);border:1px solid var(--border);padding:3px 9px;border-radius:20px;font-size:10px;font-family:var(--font-mono);color:var(--muted);}
+.tag-chip.primary{background:rgba(244,128,36,0.08);border-color:rgba(244,128,36,0.2);color:var(--accent);}
+.tag-chip.loading{opacity:0.3;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:0.3;}50%{opacity:0.6;}}
+
+.badges-row{display:flex;gap:6px;flex-wrap:wrap;}
+.badge-chip{display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);padding:3px 9px;border-radius:20px;font-size:11px;font-family:var(--font-mono);}
+.gold{color:#fbbf24;} .silver{color:#94a3b8;} .bronze{color:#b45309;}
+
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;font-size:11px;font-family:var(--font-mono);color:var(--muted);}
+.meta-item{display:flex;align-items:center;gap:4px;}
+.meta-item a{color:var(--accent);text-decoration:none;}
+
+.card-actions{display:flex;gap:8px;margin-top:auto;}
+.btn-action{flex:1;padding:8px 12px;border-radius:7px;border:none;font-size:11px;font-weight:700;font-family:var(--font-head);cursor:pointer;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:5px;transition:opacity 0.15s,transform 0.1s;}
+.btn-action:hover{opacity:0.85;transform:translateY(-1px);}
+.btn-profile{background:rgba(244,128,36,0.1);color:var(--accent);border:1px solid rgba(244,128,36,0.2);}
+.btn-copy{background:var(--surface);color:var(--muted);border:1px solid var(--border);}
+.btn-copy.copied{color:var(--green);border-color:var(--green);}
+.btn-save{background:rgba(124,58,237,0.15);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);}
+.btn-save.saved{background:rgba(124,58,237,0.35);}
+
+.pagination{display:flex;align-items:center;justify-content:center;gap:8px;padding:28px 32px;font-family:var(--font-mono);flex-wrap:wrap;}
+.pg-btn{padding:8px 18px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:12px;border-radius:8px;cursor:pointer;}
+.pg-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent);}
+.pg-btn:disabled{opacity:0.3;cursor:not-allowed;}
+.pg-info{font-size:12px;color:var(--muted);padding:0 12px;}
+.pg-num{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:12px;cursor:pointer;background:var(--surface);border:1px solid var(--border);color:var(--muted);}
+.pg-num:hover{border-color:var(--accent);color:var(--accent);}
+.pg-num.active{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:700;}
+
+.state-box{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 32px;gap:14px;color:var(--muted);font-family:var(--font-mono);font-size:13px;text-align:center;grid-column:1/-1;}
+.state-icon{font-size:48px;opacity:0.4;}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+.saved-toggle{position:fixed;bottom:72px;right:24px;background:var(--accent2);color:#fff;border:none;padding:6px 12px;border-radius:50px;font-family:var(--font-head);font-weight:700;font-size:11px;cursor:pointer;z-index:200;box-shadow:0 2px 10px rgba(124,58,237,0.35);display:flex;align-items:center;gap:6px;transition:transform 0.15s;}
+.saved-toggle:hover{transform:scale(1.05);}
+.saved-count{background:#fff;color:var(--accent2);border-radius:20px;font-size:10px;font-weight:800;padding:1px 6px;}
+.saved-count{background:#fff;color:var(--accent2);border-radius:20px;font-size:11px;font-weight:800;padding:1px 7px;}
+.drawer{position:fixed;top:0;right:-420px;width:400px;height:100vh;background:var(--surface);border-left:1px solid var(--border);z-index:300;transition:right 0.3s;display:flex;flex-direction:column;}
+.drawer.open{right:0;}
+.drawer-head{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.drawer-head h3{font-size:16px;font-weight:700;}
+.btn-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;}
+.drawer-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+.drawer-empty{font-size:12px;font-family:var(--font-mono);color:var(--muted);text-align:center;padding:40px;}
+.saved-row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);padding:12px;border-radius:10px;}
+.saved-row-info{flex:1;min-width:0;}
+.saved-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.saved-meta{font-size:11px;font-family:var(--font-mono);color:var(--muted);}
+.btn-remove{background:none;border:none;color:var(--red);cursor:pointer;font-size:16px;}
+.drawer-footer{padding:16px;border-top:1px solid var(--border);}
+.btn-clear-all{width:100%;padding:10px 16px;background:var(--surface);border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:var(--font-head);font-size:12px;cursor:pointer;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:250;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.overlay.show{opacity:1;pointer-events:all;}
+
+footer{padding:24px 32px;border-top:1px solid var(--border);font-size:11px;font-family:var(--font-mono);color:var(--muted);text-align:center;line-height:1.8;}
+footer a{color:var(--accent);text-decoration:none;}
+
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+
+/* DEMO */
+.demo-trigger{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:var(--font-mono);color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-top:0.5rem;transition:color 0.15s;letter-spacing:0.03em;}
+.demo-trigger:hover{color:var(--accent);}
+.demo-trigger-icon{width:16px;height:16px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.demo-trigger-icon svg{width:6px;height:6px;fill:currentColor;margin-left:1px;}
+.demo-wrap{overflow:hidden;max-height:0;transition:max-height 0.35s ease,margin 0.35s ease;margin-bottom:0;}
+.demo-wrap.open{max-height:500px;margin-bottom:2.5rem;}
+.demo-thumb{display:block;position:relative;width:100%;margin-top:0.75rem;border-radius:4px;overflow:hidden;border:0.5px solid var(--border);text-decoration:none;}
+.demo-thumb img{width:100%;display:block;opacity:0.85;transition:opacity 0.2s;}
+.demo-thumb:hover img{opacity:1;}
+.demo-thumb-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:56px;height:56px;background:rgba(0,0,0,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.demo-thumb:hover .demo-thumb-play{background:rgba(255,0,0,0.85);}
+.demo-thumb-play svg{width:20px;height:20px;fill:#fff;margin-left:3px;}
+.demo-thumb-label{position:absolute;bottom:0;left:0;right:0;padding:0.5rem 0.75rem;font-size:10px;font-family:var(--font-mono);color:rgba(255,255,255,0.6);background:linear-gradient(transparent,rgba(0,0,0,0.6));letter-spacing:0.04em;}
+
+@media(max-width:640px){
+  header,.search-section,.grid-container,.status-bar,.token-bar,.data-notice{padding-left:16px;padding-right:16px;}
+  .dev-grid{grid-template-columns:1fr;}
+  .drawer{width:100%;right:-100%;}
+}
+</style>
+</head>
+<body class="dark">
+
+<header>
+  <div class="logo">Repute<span>Scoper</span></div>
+  <div class="tagline">// LinkedIn has profiles. Stack Overflow has proof. · <a href="/" style="color:var(--accent);text-decoration:none;">sourcer.club</a></div>
+  <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+</header>
+
+<div class="search-section" style="padding-top:16px;padding-bottom:16px;">
+  <button class="demo-trigger" onclick="toggleDemo()">
+    <span class="demo-trigger-icon"><svg viewBox="0 0 10 10"><polygon points="2,1 9,5 2,9"/></svg></span>
+    <span id="demoTriggerLabel">Watch demo</span>
+  </button>
+  <div class="demo-wrap" id="demoWrap">
+    <a class="demo-thumb" href="https://www.youtube.com/watch?v=9Q64dadfQI0" target="_blank">
+      <img src="https://img.youtube.com/vi/9Q64dadfQI0/maxresdefault.jpg" alt="ReputeScoper demo" onerror="this.src='https://img.youtube.com/vi/9Q64dadfQI0/hqdefault.jpg'"/>
+      <div class="demo-thumb-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+      <div class="demo-thumb-label">opens on YouTube · ~90 sec</div>
+    </a>
+  </div>
+</div>
+
+<div class="token-bar" id="tokenBar">
+  <span id="tokenIcon">⚡</span>
+  <span class="token-msg" id="tokenMsg">Add a Stack Exchange API key to enrich profiles with live badges &amp; tags. <a href="https://stackapps.com/apps/oauth/register" target="_blank">Register free ↗</a></span>
+  <div class="token-wrap" id="tokenWrap">
+    <input type="password" id="tokenInput" placeholder="Stack Exchange API key (optional)"/>
+    <button class="btn-token" id="btnSaveToken" onclick="saveToken()">Verify &amp; Save</button>
+  </div>
+</div>
+
+
+
+<div class="search-section">
+  <div class="search-row">
+    <div class="input-wrap" style="min-width:220px;max-width:320px">
+      <label>Skill / Boolean Search</label>
+      <input type="text" id="skillInput" placeholder='e.g. python AND (django OR flask)' autocomplete="off" spellcheck="false"/>
+    </div>
+    <div class="input-wrap" style="max-width:200px;position:relative">
+      <label>City</label>
+      <div id="cityDropdownBtn" onclick="toggleCityDropdown()" style="width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:13px;padding:10px 14px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;user-select:none;white-space:nowrap;overflow:hidden;">
+        <span id="cityBtnLabel" style="overflow:hidden;text-overflow:ellipsis;">All India</span><span style="flex-shrink:0;font-size:10px;">▾</span>
+      </div>
+      <div id="cityDropdown" style="display:none;position:absolute;top:calc(100% + 4px);left:0;min-width:180px;background:var(--surface);border:1px solid var(--border);border-radius:10px;z-index:500;box-shadow:0 8px 24px rgba(0,0,0,0.12);overflow:hidden;">
+        <div style="padding:6px;">
+          <label class="city-opt" style="border-bottom:1px solid var(--border);margin-bottom:4px;padding-bottom:8px;">
+            <input type="checkbox" id="city-all" value="all" onchange="onCityChange(this)"><span>🇮🇳 All India</span>
+          </label>
+          <label class="city-opt"><input type="checkbox" id="city-bengaluru" value="bengaluru" onchange="onCityChange(this)"><span>Bengaluru</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-chennai" value="chennai" onchange="onCityChange(this)"><span>Chennai</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-delhi" value="delhi" onchange="onCityChange(this)"><span>Delhi NCR</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-hyderabad" value="hyderabad" onchange="onCityChange(this)"><span>Hyderabad</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-mumbai" value="mumbai" onchange="onCityChange(this)"><span>Mumbai</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-pune" value="pune" onchange="onCityChange(this)"><span>Pune</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-kolkata" value="kolkata" onchange="onCityChange(this)"><span>Kolkata</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-kochi" value="kochi" onchange="onCityChange(this)"><span>Kochi</span></label>
+          <label class="city-opt"><input type="checkbox" id="city-ahmedabad" value="ahmedabad" onchange="onCityChange(this)"><span>Ahmedabad</span></label>
+          <label class="city-opt" style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px;"><input type="checkbox" id="city-others" value="others" onchange="onCityChange(this)"><span>Other Cities</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="input-wrap" style="max-width:130px">
+      <label>Min Reputation</label>
+      <input type="number" id="minRep" placeholder="e.g. 500" min="0"/>
+    </div>
+    <div class="input-wrap" style="max-width:150px">
+      <label>Sort By</label>
+      <select id="sortBy">
+        <option value="score">Match Score</option>
+        <option value="rep">Reputation</option>
+        <option value="badge">Badge Score</option>
+      </select>
+    </div>
+    <div class="input-wrap" style="max-width:115px">
+      <label>Per Page</label>
+      <select id="perPage">
+        <option value="10">10 results</option>
+        <option value="20" selected>20 results</option>
+        <option value="50">50 results</option>
+      </select>
+    </div>
+    <button class="btn-search" id="searchBtn" onclick="doSearch(1)">🔍 Search</button>
+  </div>
+  <div class="filter-row">
+    <div class="badge-filter">
+      <label>Min badges:</label>
+      <span class="gold-icon">●</span><input type="number" id="minGold" placeholder="0" min="0"/>
+      <span class="silver-icon">●</span><input type="number" id="minSilver" placeholder="0" min="0"/>
+      <span class="bronze-icon">●</span><input type="number" id="minBronze" placeholder="0" min="0"/>
+    </div>
+    <label class="toggle-wrap" onclick="toggleHasWebsite()">
+      <div class="toggle" id="websiteToggle"></div>
+      <span>Has website</span>
+    </label>
+    <label class="toggle-wrap" onclick="toggleHasBio()">
+      <div class="toggle" id="bioToggle"></div>
+      <span>Has bio</span>
+    </label>
+    <div class="search-hint">
+      Boolean: <span>python AND (django OR flask)</span> · <span>NOT</span> to exclude · <span>"data engineer"</span> for exact phrases
+    </div>
+  </div>
+</div>
+
+<div class="status-bar" id="statusBar" style="display:none">
+  <span>Found <span class="count" id="totalCount">0</span> developers</span>
+  <span class="query-tag" id="queryTag"></span>
+  <span class="rate-badge rate-ok" id="rateBadge" style="display:none">SO API ✓</span>
+</div>
+
+<div class="grid-container">
+  <div class="dev-grid" id="devGrid">
+    <div class="state-box">
+      <div class="state-icon">📚</div>
+      <div>Search Stack Overflow developers across India</div>
+      <div style="font-size:11px;margin-top:6px;color:#888">Enter a skill to begin</div>
+    </div>
+  </div>
+</div>
+<div class="pagination" id="paginationWrap" style="display:none"></div>
+
+<footer style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+  <span>Developer data sourced from <a href="https://archive.org/details/stackexchange" target="_blank">Stack Exchange Data Dump</a>,
+  licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a> · Data as of April 2024 ·
+  Built by <a href="/">Sourcer.club</a> ·
+  &copy; 2026 Sourcer.club · <a href="https://github.com/Sourcer-Club/sourcer-club/blob/main/LICENSE" target="_blank">MIT License</a></span>
+  <a href="https://github.com/Sourcer-Club/sourcer-club/tree/main/repute" target="_blank">GitHub ↗</a>
+</footer>
+
+<button class="saved-toggle" onclick="toggleDrawer()">📌 <span class="saved-count" id="savedCount">0</span></button>
+<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+<footer
+<div class="drawer" id="drawer">
+  <div class="drawer-head"><h3>📌 Saved Candidates</h3><button class="btn-close" onclick="toggleDrawer()">×</button></div>
+  <div class="drawer-body" id="drawerBody"><div class="drawer-empty">No candidates saved yet.</div></div>
+  <div class="drawer-footer"><button class="btn-clear-all" onclick="clearAll()">Clear All</button></div>
+</div>
+
+<script>
+// ── STATE ──
+var soApiKey = localStorage.getItem('ss_sokey') || '';
+var savedCandidates = {};
+var currentPage = 1;
+var currentPerPage = 20;
+var currentSkill = '';
+var allFilteredResults = [];
+var loadedCityData = {};
+var enrichedUsers = {};
+var hasWebsiteFilter = false;
+var hasBioFilter = false;
+var selectedCities = ['all']; // default All India
+
+// ── CITY MULTI-SELECT LOGIC ──
+function toggleCityDropdown() {
+  var dd = document.getElementById('cityDropdown');
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', function(e) {
+  var btn = document.getElementById('cityDropdownBtn');
+  var dd = document.getElementById('cityDropdown');
+  if (btn && dd && !btn.contains(e.target) && !dd.contains(e.target)) {
+    dd.style.display = 'none';
+  }
+});
+function onCityChange(checkbox) {
+  var val = checkbox.value;
+  if (val === 'all') {
+    // All India — uncheck everything else
+    if (checkbox.checked) {
+      selectedCities = ['all'];
+      document.querySelectorAll('#cityDropdown input[type=checkbox]').forEach(function(cb) {
+        cb.checked = cb.value === 'all';
+      });
+    } else {
+      selectedCities = [];
+    }
+  } else {
+    // Uncheck All India if a specific city is picked
+    document.getElementById('city-all').checked = false;
+    selectedCities = selectedCities.filter(function(c){ return c !== 'all'; });
+    if (checkbox.checked) {
+      if (!selectedCities.includes(val)) selectedCities.push(val);
+    } else {
+      selectedCities = selectedCities.filter(function(c){ return c !== val; });
+    }
+    // If nothing selected, fall back to All India
+    if (!selectedCities.length) {
+      selectedCities = ['all'];
+      document.getElementById('city-all').checked = true;
+    }
+  }
+  updateCityLabel();
+}
+function updateCityLabel() {
+  var label = '';
+  if (selectedCities.includes('all')) {
+    label = 'All India';
+  } else {
+    var names = {
+      bengaluru:'Bengaluru', chennai:'Chennai', delhi:'Delhi NCR',
+      hyderabad:'Hyderabad', mumbai:'Mumbai', pune:'Pune',
+      kolkata:'Kolkata', kochi:'Kochi', ahmedabad:'Ahmedabad', others:'Others'
+    };
+    label = selectedCities.map(function(c){ return names[c]||c; }).join(', ');
+    if (label.length > 28) label = selectedCities.length + ' cities selected';
+  }
+  document.getElementById('cityBtnLabel').textContent = label;
+}
+// Init: check All India by default
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('city-all').checked = true;
+});
+var badgeData = {};
+var badgeDataLoaded = false;
+
+// ── BADGE TAG ALIAS MAP ──
+var BADGE_TAG_ALIASES = {
+  'react':      ['reactjs'],
+  'nodejs':     ['node.js'],
+  'node':       ['node.js'],
+  'vue':        ['vue.js'],
+  'nextjs':     ['next.js'],
+  'nuxt':       ['nuxt.js'],
+  'expressjs':  ['express'],
+  'postgres':   ['postgresql'],
+  'mongo':      ['mongodb'],
+  'k8s':        ['kubernetes'],
+  'ml':         ['machine-learning'],
+  'ai':         ['artificial-intelligence'],
+  'ts':         ['typescript'],
+  'js':         ['javascript'],
+  'py':         ['python'],
+  'cpp':        ['c++'],
+  'dotnet':     ['.net'],
+  'csharp':     ['c#'],
+};
+
+// ── CITY CONFIG ──
+var CITY_CONFIG = {
+  bengaluru: {file:'bengaluru.js', varName:'SO_BENGALURU'},
+  chennai:   {file:'chennai.js',   varName:'SO_CHENNAI'},
+  delhi:     {file:'delhi.js',     varName:'SO_DELHI'},
+  hyderabad: {file:'hyderabad.js', varName:'SO_HYDERABAD'},
+  mumbai:    {file:'mumbai.js',    varName:'SO_MUMBAI'},
+  pune:      {file:'pune.js',      varName:'SO_PUNE'},
+  kolkata:   {file:'kolkata.js',   varName:'SO_KOLKATA'},
+  kochi:     {file:'kochi.js',     varName:'SO_KOCHI'},
+  ahmedabad: {file:'ahmedabad.js', varName:'SO_AHMEDABAD'},
+  others:    {file:'others.js',    varName:'SO_OTHERS'}
+};
+
+var CITY_KEYWORDS = {
+  bengaluru: ['bangalore','bengaluru','karnataka'],
+  chennai:   ['chennai','madras','tamil nadu'],
+  delhi:     ['delhi','noida','gurugram','gurgaon','ncr'],
+  hyderabad: ['hyderabad','secunderabad','telangana'],
+  mumbai:    ['mumbai','bombay','thane'],
+  pune:      ['pune','pimpri'],
+  kolkata:   ['kolkata','calcutta'],
+  kochi:     ['kochi','cochin','kerala'],
+  ahmedabad: ['ahmedabad','gujarat'],
+  others:    [],
+  all:       []
+};
+
+var INDIA_TERMS = [
+  // ── Country ──
+  'india',
+
+  // ── Tier 1 Metros ──
+  'mumbai','delhi','bengaluru','bangalore','chennai','madras',
+  'hyderabad','kolkata','calcutta','pune','ahmedabad',
+
+  // ── Tier 1 Metro aliases & suburbs ──
+  'bombay','new delhi','ncr','noida','gurugram','gurgaon','faridabad','ghaziabad',
+  'thane','navi mumbai','secunderabad','pimpri','chinchwad',
+
+  // ── Tier 2 Major Cities ──
+  'jaipur','surat','lucknow','kanpur','nagpur','indore','bhopal','patna',
+  'vadodara','baroda','coimbatore','vizag','visakhapatnam','agra','nashik',
+  'meerut','rajkot','varanasi','banaras','amritsar','allahabad','prayagraj',
+  'ranchi','howrah','jodhpur','madurai','raipur','kota','chandigarh','guwahati',
+  'mysuru','mysore','hubli','dharwad','mangalore','mangaluru','belgaum','belagavi',
+  'vijayawada','tiruchirappalli','trichy','tirupati','salem','erode','vellore',
+  'warangal','kochi','cochin','kozhikode','calicut','thrissur','trivandrum',
+  'thiruvananthapuram','kollam','palakkad','malappuram','kannur',
+  'bhubaneswar','cuttack','dehradun','shimla','jammu','srinagar',
+  'aurangabad','solapur','kolhapur','amravati','nanded',
+  'jabalpur','gwalior','ujjain','udaipur','ajmer','bikaner','kota',
+  'ludhiana','jalandhar','patiala','ambala',
+  'surat','bhavnagar','jamnagar','gandhinagar','anand',
+
+  // ── States & Union Territories ──
+  'karnataka','maharashtra','tamil nadu','tamilnadu','telangana','kerala',
+  'gujarat','rajasthan','uttar pradesh','madhya pradesh','west bengal',
+  'andhra pradesh','bihar','punjab','haryana','odisha','orissa',
+  'jharkhand','assam','uttarakhand','himachal pradesh','chhattisgarh',
+  'goa','tripura','meghalaya','manipur','nagaland','arunachal pradesh',
+  'sikkim','mizoram','jammu and kashmir','ladakh',
+  'delhi ncr','chandigarh','puducherry','pondicherry'
+];
+
+// ── INDIA LOCATION MATCH ──
+function isIndianLocation(loc) {
+  if (!loc) return true; // blank location — give benefit of doubt
+  var l = loc.toLowerCase().trim();
+  // Explicit exclusions — catch known false positives first
+  var exclusions = ['indiana','indianapolis','indiana,','indiana ','pakistan','bangladesh'];
+  if (exclusions.some(function(ex){ return l.indexOf(ex) !== -1; })) return false;
+  // Word-boundary match: term must be preceded and followed by non-alpha characters or string edges
+  return INDIA_TERMS.some(function(term) {
+    var idx = l.indexOf(term);
+    while (idx !== -1) {
+      var before = idx === 0 || /[^a-z]/.test(l[idx-1]);
+      var after  = (idx + term.length) >= l.length || /[^a-z]/.test(l[idx + term.length]);
+      if (before && after) return true;
+      idx = l.indexOf(term, idx + 1);
+    }
+    return false;
+  });
+}
+
+// ── THEME ──
+function initTheme() {
+  var t = localStorage.getItem('ss_theme') || 'dark';
+  if (t !== 'dark') { document.body.classList.remove('dark'); }
+}
+function toggleDemo(){
+  const wrap = document.getElementById('demoWrap');
+  const label = document.getElementById('demoTriggerLabel');
+  const isOpen = wrap.classList.toggle('open');
+  label.textContent = isOpen ? 'Hide demo' : 'Watch demo';
+}
+function toggleTheme() {
+  var dark = document.body.classList.toggle('dark');
+  localStorage.setItem('ss_theme', dark ? 'dark' : 'light');
+
+}
+initTheme();
+
+// ── TOGGLES ──
+function toggleHasWebsite() {
+  hasWebsiteFilter = !hasWebsiteFilter;
+  document.getElementById('websiteToggle').classList.toggle('on', hasWebsiteFilter);
+}
+function toggleHasBio() {
+  hasBioFilter = !hasBioFilter;
+  document.getElementById('bioToggle').classList.toggle('on', hasBioFilter);
+}
+
+// ── SO API KEY ──
+function setBarState(state, msg, quota) {
+  document.getElementById('tokenBar').className = 'token-bar' + (state ? ' '+state : '');
+  document.getElementById('tokenIcon').textContent = state==='valid' ? '✅' : state==='invalid' ? '❌' : '⚡';
+  document.getElementById('tokenMsg').innerHTML = msg + (quota !== undefined ? ' <span class="token-quota">'+quota.toLocaleString()+' requests remaining</span>' : '');
+}
+async function validateToken(key) {
+  try {
+    var r = await fetch('https://api.stackexchange.com/2.3/info?site=stackoverflow&key='+encodeURIComponent(key));
+    var d = await r.json();
+    if (d.error_id) return {valid:false};
+    return {valid:true, quota: d.quota_remaining||10000};
+  } catch(e) { return {valid:false}; }
+}
+async function saveToken() {
+  var val = document.getElementById('tokenInput').value.trim();
+  if (!val) return;
+  var btn = document.getElementById('btnSaveToken');
+  btn.disabled = true; btn.textContent = 'Verifying…';
+  var r = await validateToken(val);
+  if (r.valid) {
+    soApiKey = val; localStorage.setItem('ss_sokey', val);
+    document.getElementById('tokenWrap').innerHTML = '<button class="btn-token-remove" onclick="clearToken()">Remove key</button>';
+    setBarState('valid', 'Stack Exchange key verified — live badge &amp; tag enrichment active.', r.quota);
+  } else {
+    btn.disabled = false; btn.textContent = 'Verify &amp; Save';
+    setBarState('invalid', 'Key not recognized. <a href="https://stackapps.com/apps/oauth/register" target="_blank">Register a free app ↗</a>');
+  }
+}
+function clearToken() {
+  soApiKey = ''; localStorage.removeItem('ss_sokey');
+  document.getElementById('tokenWrap').innerHTML = '<input type="password" id="tokenInput" placeholder="Stack Exchange API key (optional)"/><button class="btn-token" id="btnSaveToken" onclick="saveToken()">Verify &amp; Save</button>';
+  setBarState('', 'Add a Stack Exchange API key to enrich profiles with live badges &amp; tags. <a href="https://stackapps.com/apps/oauth/register" target="_blank">Register free ↗</a>');
+}
+(async function() {
+  if (!soApiKey) return;
+  var r = await validateToken(soApiKey);
+  if (r.valid) {
+    document.getElementById('tokenWrap').innerHTML = '<button class="btn-token-remove" onclick="clearToken()">Remove key</button>';
+    setBarState('valid', 'Stack Exchange key verified — live badge &amp; tag enrichment active.', r.quota);
+  } else {
+    soApiKey = ''; localStorage.removeItem('ss_sokey');
+    setBarState('invalid', 'Saved key expired. <a href="https://stackapps.com/apps/oauth/register" target="_blank">Register a new one ↗</a>');
+  }
+})();
+
+// ── LOAD CITY DATA ──
+async function loadCityData(city) {
+  if (loadedCityData[city]) return loadedCityData[city];
+  var cfg = CITY_CONFIG[city];
+  if (!cfg) return [];
+  try {
+    var res = await fetch(cfg.file);
+    if (!res.ok) throw new Error('Cannot load '+cfg.file);
+    var text = await res.text();
+    var json = text.replace(/^const\s+\w+\s*=\s*/, '').replace(/;\s*$/, '').trim();
+    var data = JSON.parse(json);
+    loadedCityData[city] = data;
+    return data;
+  } catch(e) {
+    console.warn('Failed to load', cfg.file, e);
+    return [];
+  }
+}
+
+// ── LOAD BADGE DATA ──
+async function loadBadgeData() {
+  if (badgeDataLoaded) return;
+  try {
+    var res = await fetch('badges.js');
+    if (!res.ok) { console.warn('badges.js not found'); return; }
+    var text = await res.text();
+    var json = text.replace(/^const\s+badgeData\s*=\s*/, '').replace(/;\s*$/, '').trim();
+    badgeData = JSON.parse(json);
+    badgeDataLoaded = true;
+    console.log('Badge data loaded:', Object.keys(badgeData).length, 'users');
+  } catch(e) { console.warn('Failed to load badges.js', e); }
+}
+
+// ── BADGE POOL: get user IDs that have a tag badge matching the search terms ──
+function getBadgeMatchedUserIds(terms) {
+  var matchedIds = new Set();
+  // Expand terms with aliases
+  var expandedTerms = [];
+  terms.forEach(function(term) {
+    expandedTerms.push(term);
+    if (BADGE_TAG_ALIASES[term]) {
+      BADGE_TAG_ALIASES[term].forEach(function(alias){ expandedTerms.push(alias); });
+    }
+  });
+  Object.keys(badgeData).forEach(function(uid) {
+    var tags = badgeData[uid];
+    if (expandedTerms.some(function(term) {
+      return tags.some(function(tag){ return tag === term || tag.indexOf(term) !== -1 || term.indexOf(tag) !== -1; });
+    })) {
+      matchedIds.add(uid);
+    }
+  });
+  return matchedIds;
+}
+
+// ── BADGE SCORE: how many search terms match a user's badge tags ──
+function badgeTagScore(userId, terms) {
+  var tags = badgeData[String(userId)] || [];
+  if (!tags.length) return 0;
+  var expandedTerms = [];
+  terms.forEach(function(term) {
+    expandedTerms.push(term);
+    if (BADGE_TAG_ALIASES[term]) {
+      BADGE_TAG_ALIASES[term].forEach(function(alias){ expandedTerms.push(alias); });
+    }
+  });
+  var score = 0;
+  expandedTerms.forEach(function(term) {
+    if (tags.some(function(tag){ return tag === term || tag.indexOf(term) !== -1; })) score += 4;
+  });
+  return score;
+}
+
+// ── BOOLEAN SEARCH ──
+function buildMatcher(input) {
+  if (!input.trim()) return function() { return false; };
+  try {
+    var tokens = tokenize(input);
+    var pos = 0;
+    function peek() { return tokens[pos]; }
+    function next() { return tokens[pos++]; }
+    function expr() {
+      var left = term();
+      while (peek() && peek().t === 'AND') {
+        next();
+        var right = term();
+        left = (function(l,r){ return function(s){ return l(s) && r(s); }; })(left, right);
+      }
+      return left;
+    }
+    function term() {
+      var left = factor();
+      while (peek() && peek().t === 'OR') {
+        next();
+        var right = factor();
+        left = (function(l,r){ return function(s){ return l(s) || r(s); }; })(left, right);
+      }
+      return left;
+    }
+    function factor() {
+      var t = peek();
+      if (!t || t.t === 'RP') return function() { return true; };
+      if (t.t === 'NOT') { next(); var f = factor(); return (function(fn){ return function(s){ return !fn(s); }; })(f); }
+      if (t.t === 'LP') { next(); var inner = expr(); if (peek() && peek().t === 'RP') next(); return inner; }
+      if (t.t === 'TERM' || t.t === 'PHRASE') { next(); var v = t.v; return function(s){ return s.indexOf(v) !== -1; }; }
+      next();
+      return function() { return true; };
+    }
+    return expr();
+  } catch(e) {
+    var kws = input.toLowerCase().split(/[\s,]+/).filter(function(k){ return k.length > 1; });
+    return function(s) { return kws.some(function(k){ return s.indexOf(k) !== -1; }); };
+  }
+}
+function tokenize(input) {
+  var tokens = [];
+  var re = /"([^"]+)"|([()\s])|([^\s()]+)/g;
+  var m;
+  while ((m = re.exec(input)) !== null) {
+    if (m[1]) { tokens.push({t:'PHRASE', v:m[1].toLowerCase()}); }
+    else if (m[2] && m[2].trim()) { tokens.push({t: m[2]==='(' ? 'LP' : 'RP'}); }
+    else if (m[3]) {
+      var up = m[3].toUpperCase();
+      if (up==='AND') tokens.push({t:'AND'});
+      else if (up==='OR') tokens.push({t:'OR'});
+      else if (up==='NOT') tokens.push({t:'NOT'});
+      else tokens.push({t:'TERM', v:m[3].toLowerCase()});
+    }
+  }
+  return tokens;
+}
+function scoreUser(u, matcher, terms) {
+  var text = ((u.bio||'') + ' ' + (u.name||'')).toLowerCase();
+  if (!matcher(text)) return 0;
+  var score = 0;
+  terms.forEach(function(t) {
+    if ((u.bio||'').toLowerCase().indexOf(t) !== -1) score += 2;
+    if ((u.name||'').toLowerCase().indexOf(t) !== -1) score += 1;
+  });
+  return score;
+}
+
+// ── SEARCH ──
+async function doSearch(page) {
+  var skill = document.getElementById('skillInput').value.trim().toLowerCase();
+  if (!skill) { alert('Please enter a skill or technology.'); return; }
+  var cities = selectedCities.length ? selectedCities : ['all'];
+
+  currentSkill = skill;
+  currentPerPage = parseInt(document.getElementById('perPage').value);
+  var btn = document.getElementById('searchBtn');
+
+  if (page === 1) {
+    allFilteredResults = [];
+    btn.disabled = true; btn.textContent = '⏳ Loading…';
+    setGrid('<div class="state-box"><div class="spinner"></div><div>Loading developer data…</div></div>');
+    document.getElementById('paginationWrap').style.display = 'none';
+    document.getElementById('statusBar').style.display = 'none';
+
+    try {
+      // Load city files
+      var users = [];
+      var citiesToLoad = cities.includes('all') ? Object.keys(CITY_CONFIG) : cities;
+      for (var ci = 0; ci < citiesToLoad.length; ci++) {
+        var cityData = await loadCityData(citiesToLoad[ci]);
+        for (var ui = 0; ui < cityData.length; ui++) users.push(cityData[ui]);
+      }
+      // Deduplicate
+      var seen = {};
+      users = users.filter(function(u) {
+        if (seen[u.id]) return false;
+        seen[u.id] = true;
+        return true;
+      });
+
+      if (!users.length) {
+        setGrid('<div class="state-box"><div class="state-icon">📂</div><div>Could not load city data. Make sure the .js files are in the same folder.</div></div>');
+        btn.disabled = false; btn.textContent = '🔍 Search';
+        return;
+      }
+
+      var minRep = parseInt(document.getElementById('minRep').value) || 0;
+      var isAll = cities.includes('all');
+      // Merge keywords for all selected cities
+      var cityKws = isAll ? [] : cities.reduce(function(acc, c) {
+        return acc.concat(CITY_KEYWORDS[c] || []);
+      }, []);
+      var matcher = buildMatcher(skill);
+      var terms = skill.replace(/[()]/g, '').split(/\s+/)
+        .filter(function(t){ return t !== 'and' && t !== 'or' && t !== 'not' && t.length > 1; });
+
+      // Load badge data in parallel with filtering
+      await loadBadgeData();
+
+      // ── BIO POOL: users matching via bio/name ──
+      var bioPool = users.map(function(u) {
+        return Object.assign({}, u, {_score: scoreUser(u, matcher, terms), _source: 'bio'});
+      }).filter(function(u) {
+        if (u._score === 0) return false;
+        if (u.rep < minRep) return false;
+        var loc = (u.loc||'').toLowerCase();
+        if (isAll) {
+          // For All India, still enforce Indian location
+          return !loc || isIndianLocation(loc);
+        }
+        if (cities.includes('others') && cities.length === 1) {
+          return isIndianLocation(loc);
+        }
+        if (cities.includes('others')) {
+          return isIndianLocation(loc) || cityKws.some(function(k){ return loc.indexOf(k) !== -1; });
+        }
+        return cityKws.some(function(k){ return loc.indexOf(k) !== -1; });
+      });
+
+      // ── BADGE POOL: users matching via tag badges ──
+      var badgeMatchedIds = getBadgeMatchedUserIds(terms);
+      var bioPoolIds = new Set(bioPool.map(function(u){ return String(u.id); }));
+      var badgePool = [];
+      if (badgeMatchedIds.size > 0) {
+        users.forEach(function(u) {
+          if (!badgeMatchedIds.has(String(u.id))) return;
+          if (bioPoolIds.has(String(u.id))) return; // already in bio pool, don't duplicate
+          if (u.rep < minRep) return;
+          var loc = (u.loc||'').toLowerCase();
+          if (isAll) {
+            if (loc && !isIndianLocation(loc)) return;
+          } else if (cities.includes('others') && cities.length === 1) {
+            if (!isIndianLocation(loc)) return;
+          } else if (cities.includes('others')) {
+            if (!isIndianLocation(loc) && !cityKws.some(function(k){ return loc.indexOf(k) !== -1; })) return;
+          } else {
+            if (!cityKws.some(function(k){ return loc.indexOf(k) !== -1; })) return;
+          }
+          badgePool.push(Object.assign({}, u, {_score: 0, _source: 'badge'}));
+        });
+      }
+
+      // ── MERGE: bio pool users get their badge score added, then append badge-only users ──
+      bioPool.forEach(function(u) {
+        u._badgeScore = badgeTagScore(u.id, terms);
+      });
+      badgePool.forEach(function(u) {
+        u._badgeScore = badgeTagScore(u.id, terms);
+      });
+
+      allFilteredResults = bioPool.concat(badgePool);
+
+      if (hasWebsiteFilter) allFilteredResults = allFilteredResults.filter(function(u){ return u.web && u.web.trim(); });
+      if (hasBioFilter) allFilteredResults = allFilteredResults.filter(function(u){ return u.bio && u.bio.trim(); });
+
+      var sortBy = document.getElementById('sortBy').value;
+      allFilteredResults.sort(function(a,b) {
+        if (sortBy === 'rep') return b.rep - a.rep;
+        if (sortBy === 'badge') return (b._badgeScore - a._badgeScore) || (b.rep - a.rep);
+        var aTotal = a._score + a._badgeScore;
+        var bTotal = b._score + b._badgeScore;
+        return (bTotal - aTotal) || (b.rep - a.rep);
+      });
+
+    } catch(e) {
+      setGrid('<div class="state-box"><div class="state-icon">⚠️</div><div>'+e.message+'</div></div>');
+      btn.disabled = false; btn.textContent = '🔍 Search';
+      return;
+    }
+    btn.disabled = false; btn.textContent = '🔍 Search';
+  }
+
+  // Badge filters
+  var minGold   = parseInt(document.getElementById('minGold').value)   || 0;
+  var minSilver = parseInt(document.getElementById('minSilver').value) || 0;
+  var minBronze = parseInt(document.getElementById('minBronze').value) || 0;
+
+  var filtered = allFilteredResults;
+  if (minGold || minSilver || minBronze) {
+    filtered = allFilteredResults.filter(function(u) {
+      var e = enrichedUsers[u.id];
+      var bc = e ? (e.badge_counts||{}) : {};
+      return (bc.gold||0) >= minGold && (bc.silver||0) >= minSilver && (bc.bronze||0) >= minBronze;
+    });
+  }
+
+  currentPage = page;
+  var total = filtered.length;
+  var cityLabel = document.getElementById('cityBtnLabel').textContent;
+  var pageItems = filtered.slice((page-1)*currentPerPage, page*currentPerPage);
+
+  var badgeCount = allFilteredResults.filter(function(u){ return u._source === 'badge'; }).length;
+  var bioCount = allFilteredResults.filter(function(u){ return u._source === 'bio'; }).length;
+  document.getElementById('totalCount').textContent = total.toLocaleString();
+  document.getElementById('queryTag').textContent = skill + ' · ' + cityLabel + (badgeCount > 0 ? ' · ' + bioCount + ' bio · ' + badgeCount + ' badge' : '');
+  document.getElementById('statusBar').style.display = 'flex';
+
+  if (!pageItems.length) {
+    setGrid('<div class="state-box"><div class="state-icon">🕳</div><div>No developers found. Try broader terms or a different city.</div></div>');
+    document.getElementById('paginationWrap').style.display = 'none';
+    return;
+  }
+
+  if (soApiKey) {
+    setGrid('<div class="state-box"><div class="spinner"></div><div>Scoring candidates…</div></div>');
+    await enrichCards(pageItems);
+    // Re-sort pageItems by combined tag + bio score now that enrichment data is available
+    pageItems.sort(function(a, b) {
+      var tagDiff = enrichTagScore(b) - enrichTagScore(a);
+      if (tagDiff !== 0) return tagDiff;
+      return (b._score - a._score) || (b.rep - a.rep);
+    });
+  }
+  renderCards(pageItems, page);
+  renderPagination(page, total);
+}
+
+// ── RENDER CARDS ──
+function renderCards(items, page) {
+  var grid = document.getElementById('devGrid');
+  grid.innerHTML = '';
+  var terms = currentSkill.replace(/[()]/g, '').split(/\s+/)
+    .filter(function(t){ return t !== 'and' && t !== 'or' && t !== 'not' && t.length > 1; });
+  var maxScore = terms.length * 2;
+
+  items.forEach(function(user, i) {
+    var rank = (page-1)*currentPerPage + i + 1;
+    var soUrl = 'https://stackoverflow.com/users/'+user.id;
+    var isSaved = !!savedCandidates[user.id];
+    var enriched = enrichedUsers[user.id];
+
+    var tagScore = enrichTagScore(user);
+    var hasBadge = (user._badgeScore || 0) > 0;
+    var ratio = maxScore > 0 ? user._score / maxScore : 0;
+    var scoreLabel, scoreColor;
+    if (hasBadge && user._score > 0 && tagScore > 0) { scoreLabel = '★★★ Bio + Badge + Tags'; scoreColor = 'var(--green)'; }
+    else if (hasBadge && user._score > 0)             { scoreLabel = '★★★ Bio + Badge';        scoreColor = 'var(--green)'; }
+    else if (hasBadge && tagScore > 0)                { scoreLabel = '★★★ Badge + Tags';       scoreColor = 'var(--green)'; }
+    else if (hasBadge)                                { scoreLabel = '★★ Badge match';          scoreColor = 'var(--accent)'; }
+    else if (tagScore > 0 && user._score > 0)         { scoreLabel = '★★★ Tags + Bio';         scoreColor = 'var(--green)'; }
+    else if (tagScore > 0)                            { scoreLabel = '★★ Tags match';           scoreColor = 'var(--accent)'; }
+    else if (ratio >= 0.8)                            { scoreLabel = '★★★ Bio match';           scoreColor = 'var(--green)'; }
+    else if (ratio >= 0.4)                            { scoreLabel = '★★ Partial bio';          scoreColor = 'var(--accent)'; }
+    else                                              { scoreLabel = '★ Weak bio';              scoreColor = 'var(--muted)'; }
+
+    var card = document.createElement('div');
+    card.className = 'dev-card';
+    card.id = 'card-'+user.id;
+    card.dataset.bioScore = user._score || 0;
+    card.dataset.tagScore = 0;
+
+    // Rank badge
+    var rankBadge = document.createElement('span');
+    rankBadge.className = 'rank-badge';
+    rankBadge.textContent = '#'+rank;
+    card.appendChild(rankBadge);
+
+    // Score label
+    var scoreBadge = document.createElement('span');
+    scoreBadge.className = 'score-label';
+    scoreBadge.textContent = scoreLabel;
+    scoreBadge.style.color = scoreColor;
+    card.appendChild(scoreBadge);
+
+    // Card top
+    var cardTop = document.createElement('div');
+    cardTop.className = 'card-top';
+
+    // Avatar
+    if (enriched && enriched.profile_image) {
+      var img = document.createElement('img');
+      img.className = 'avatar';
+      img.src = enriched.profile_image;
+      img.loading = 'lazy';
+      img.alt = user.name||'';
+      img.onerror = function() {
+        var ph = document.createElement('div');
+        ph.className = 'avatar-ph';
+        ph.textContent = '👤';
+        this.parentNode.replaceChild(ph, this);
+      };
+      cardTop.appendChild(img);
+    } else {
+      var ph = document.createElement('div');
+      ph.className = 'avatar-ph';
+      ph.textContent = '👤';
+      cardTop.appendChild(ph);
+    }
+
+    // Identity
+    var identity = document.createElement('div');
+    identity.className = 'card-identity';
+    identity.innerHTML =
+      '<div class="dev-name">'+(user.name||'Unknown')+'</div>'+
+      '<div class="dev-sub">user #'+user.id+'</div>'+
+      '<div class="rep-badge">⚡ '+fmtRep(user.rep)+' rep</div>';
+    cardTop.appendChild(identity);
+    card.appendChild(cardTop);
+
+    // Bio
+    if (user.bio) {
+      var bio = document.createElement('div');
+      bio.className = 'dev-bio';
+      bio.textContent = user.bio;
+      card.appendChild(bio);
+    }
+
+    // Tags row
+    var tagsRow = document.createElement('div');
+    tagsRow.className = 'tags-row';
+    tagsRow.id = 'tags-'+user.id;
+    var tags = enriched ? (enriched.top_answer_tags||[]) : [];
+    if (tags.length) {
+      tags.forEach(function(t, idx) {
+        var chip = document.createElement('span');
+        chip.className = 'tag-chip' + (idx===0?' primary':'');
+        chip.textContent = t;
+        tagsRow.appendChild(chip);
+      });
+    } else {
+      var loading = document.createElement('span');
+      loading.className = 'tag-chip loading';
+      loading.textContent = 'loading tags…';
+      tagsRow.appendChild(loading);
+    }
+    card.appendChild(tagsRow);
+
+    // Badges row
+    var badgesRow = document.createElement('div');
+    badgesRow.className = 'badges-row';
+    badgesRow.id = 'badges-'+user.id;
+    var bc = enriched ? (enriched.badge_counts||{}) : {};
+    if (enriched) {
+      badgesRow.innerHTML =
+        '<span class="badge-chip"><span class="gold">●</span> '+(bc.gold||0)+'</span>'+
+        '<span class="badge-chip"><span class="silver">●</span> '+(bc.silver||0)+'</span>'+
+        '<span class="badge-chip"><span class="bronze">●</span> '+(bc.bronze||0)+'</span>';
+    } else {
+      badgesRow.innerHTML =
+        '<span class="badge-chip" style="opacity:0.3"><span class="gold">●</span> —</span>'+
+        '<span class="badge-chip" style="opacity:0.3"><span class="silver">●</span> —</span>'+
+        '<span class="badge-chip" style="opacity:0.3"><span class="bronze">●</span> —</span>';
+    }
+    card.appendChild(badgesRow);
+
+    // Meta row
+    var metaRow = document.createElement('div');
+    metaRow.className = 'meta-row';
+    metaRow.id = 'meta-'+user.id;
+    var metaHtml = '<span class="meta-item">📍 '+user.loc+'</span>';
+    if (user.web) {
+      var href = user.web.indexOf('http') === 0 ? user.web : 'https://'+user.web;
+      metaHtml += '<span class="meta-item"><a href="'+href+'" target="_blank">🌐 Website</a></span>';
+    }
+    if (enriched && enriched.creation_date) metaHtml += '<span class="meta-item">📅 Joined '+fmtDate(enriched.creation_date)+'</span>';
+    if (enriched && enriched.last_access_date) metaHtml += '<span class="meta-item">🕐 '+timeAgo(enriched.last_access_date)+'</span>';
+    metaRow.innerHTML = metaHtml;
+    card.appendChild(metaRow);
+
+    // Actions
+    var actions = document.createElement('div');
+    actions.className = 'card-actions';
+    actions.style.marginTop = 'auto';
+
+    var profLink = document.createElement('a');
+    profLink.className = 'btn-action btn-profile';
+    profLink.href = soUrl;
+    profLink.target = '_blank';
+    profLink.textContent = '↗ Profile';
+    actions.appendChild(profLink);
+
+    var copyBtn = document.createElement('button');
+    copyBtn.className = 'btn-action btn-copy';
+    copyBtn.textContent = '⎘ Copy';
+    copyBtn.onclick = (function(url) { return function() { copyLink(url, this); }; })(soUrl);
+    actions.appendChild(copyBtn);
+
+    var saveBtn = document.createElement('button');
+    saveBtn.className = 'btn-action btn-save' + (isSaved?' saved':'');
+    saveBtn.id = 'save-'+user.id;
+    saveBtn.textContent = isSaved ? '★ Saved' : '☆ Save';
+    saveBtn.onclick = (function(id, name, url) {
+      return function() { toggleSave(id, name, url, this); };
+    })(user.id, user.name||'', soUrl);
+    actions.appendChild(saveBtn);
+
+    card.appendChild(actions);
+    grid.appendChild(card);
+  });
+}
+
+// ── ENRICH TAG SCORE HELPER ──
+function enrichTagScore(user) {
+  var terms = currentSkill.replace(/[()]/g, '').split(/\s+/)
+    .filter(function(t){ return t !== 'and' && t !== 'or' && t !== 'not' && t.length > 1; });
+  var enriched = enrichedUsers[user.id];
+  var tags = enriched ? (enriched.top_answer_tags || []) : [];
+  var score = 0;
+  terms.forEach(function(term) {
+    if (tags.some(function(tag){ return tag.indexOf(term) !== -1 || term.indexOf(tag) !== -1; })) {
+      score += 3;
+    }
+  });
+  return score;
+}
+
+// ── ENRICH ──
+async function enrichCards(items) {
+  var keyParam = soApiKey ? '&key='+encodeURIComponent(soApiKey) : '';
+  var toFetch = items.filter(function(u){ return !enrichedUsers[u.id]; });
+  if (!toFetch.length) return;
+
+  // Batch all profile fetches into a single API call
+  var ids = toFetch.map(function(u){ return u.id; }).join(';');
+  var profileMap = {};
+  try {
+    var profRes = await fetch('https://api.stackexchange.com/2.3/users/'+ids+'?site=stackoverflow&pagesize=100'+keyParam);
+    var profData = await profRes.json();
+    (profData.items||[]).forEach(function(p){ profileMap[p.user_id] = p; });
+  } catch(e) { console.warn('Batch profile fetch failed', e); }
+
+  // Fire all tag calls in parallel, merging profile data in
+  await Promise.all(toFetch.map(async function(user) {
+    try {
+      var tagRes = await fetch('https://api.stackexchange.com/2.3/users/'+user.id+'/top-answer-tags?site=stackoverflow&pagesize=5'+keyParam);
+      var tagData = await tagRes.json();
+      if (tagData.quota_remaining != null) updateRateBadge(tagData.quota_remaining);
+      enrichedUsers[user.id] = Object.assign(
+        {},
+        profileMap[user.id] || {},
+        { top_answer_tags: (tagData.items||[]).map(function(t){ return t.tag_name; }) }
+      );
+    } catch(e) { console.warn('Enrich failed for', user.id, e); }
+  }));
+}
+
+function updateCard(userId) {
+  var detail = enrichedUsers[userId];
+  if (!detail) return;
+  var card = document.getElementById('card-'+userId);
+  if (!card) return;
+
+  // Avatar
+  if (detail.profile_image) {
+    var ph = card.querySelector('.avatar-ph');
+    if (ph) {
+      var img = document.createElement('img');
+      img.className = 'avatar';
+      img.src = detail.profile_image;
+      img.loading = 'lazy';
+      img.onerror = function() {
+        var newPh = document.createElement('div');
+        newPh.className = 'avatar-ph';
+        newPh.textContent = '👤';
+        this.parentNode.replaceChild(newPh, this);
+      };
+      ph.parentNode.replaceChild(img, ph);
+    }
+  }
+
+  // Tags
+  var tagsEl = document.getElementById('tags-'+userId);
+  if (tagsEl) {
+    var tags = detail.top_answer_tags || [];
+    tagsEl.innerHTML = '';
+    if (tags.length) {
+      tags.forEach(function(t, idx) {
+        var chip = document.createElement('span');
+        chip.className = 'tag-chip' + (idx===0?' primary':'');
+        chip.textContent = t;
+        tagsEl.appendChild(chip);
+      });
+    } else {
+      tagsEl.innerHTML = '<span class="tag-chip" style="opacity:0.4">no tag data</span>';
+    }
+  }
+
+  // Badges
+  var badgesEl = document.getElementById('badges-'+userId);
+  if (badgesEl) {
+    var bc = detail.badge_counts || {};
+    badgesEl.innerHTML =
+      '<span class="badge-chip"><span class="gold">●</span> '+(bc.gold||0)+'</span>'+
+      '<span class="badge-chip"><span class="silver">●</span> '+(bc.silver||0)+'</span>'+
+      '<span class="badge-chip"><span class="bronze">●</span> '+(bc.bronze||0)+'</span>';
+  }
+
+  // Meta
+  var metaEl = document.getElementById('meta-'+userId);
+  if (metaEl) {
+    var m = '<span class="meta-item">📍 '+(detail.location||'')+'</span>';
+    if (detail.website_url) {
+      var href = detail.website_url.indexOf('http')===0 ? detail.website_url : 'https://'+detail.website_url;
+      m += '<span class="meta-item"><a href="'+href+'" target="_blank">🌐 Website</a></span>';
+    }
+    if (detail.creation_date) m += '<span class="meta-item">📅 Joined '+fmtDate(detail.creation_date)+'</span>';
+    if (detail.last_access_date) m += '<span class="meta-item">🕐 '+timeAgo(detail.last_access_date)+'</span>';
+    metaEl.innerHTML = m;
+  }
+
+  document.getElementById('rateBadge').style.display = '';
+}
+
+
+
+// ── PAGINATION ──
+function renderPagination(current, total) {
+  var wrap = document.getElementById('paginationWrap');
+  var totalPages = Math.ceil(total / currentPerPage);
+  if (totalPages <= 1) { wrap.style.display = 'none'; return; }
+  wrap.style.display = 'flex';
+  var html = '<button class="pg-btn" onclick="doSearch('+(current-1)+')" '+(current===1?'disabled':'')+'>← Prev</button>';
+  var start = Math.max(1, current-2);
+  var end = Math.min(totalPages, start+4);
+  for (var p = start; p <= end; p++) {
+    html += '<div class="pg-num '+(p===current?'active':'')+'" onclick="doSearch('+p+')">'+p+'</div>';
+  }
+  html += '<span class="pg-info">Page '+current+' of '+totalPages+'</span>';
+  html += '<button class="pg-btn" onclick="doSearch('+(current+1)+')" '+(current>=totalPages?'disabled':'')+'>Next →</button>';
+  wrap.innerHTML = html;
+}
+
+// ── HELPERS ──
+function setGrid(html) { document.getElementById('devGrid').innerHTML = html; }
+function fmtRep(n) {
+  if (!n && n!==0) return '?';
+  if (n>=1000000) return (n/1000000).toFixed(1)+'m';
+  if (n>=1000) return (n/1000).toFixed(1)+'k';
+  return String(n);
+}
+function fmtDate(e) { return e ? new Date(e*1000).getFullYear() : ''; }
+function timeAgo(e) {
+  if (!e) return '';
+  var d = Math.floor(Date.now()/1000) - e;
+  if (d < 3600) return Math.floor(d/60)+'m ago';
+  if (d < 86400) return Math.floor(d/3600)+'h ago';
+  if (d < 2592000) return Math.floor(d/86400)+'d ago';
+  if (d < 31536000) return Math.floor(d/2592000)+'mo ago';
+  return Math.floor(d/31536000)+'y ago';
+}
+function updateRateBadge(q) {
+  var b = document.getElementById('rateBadge');
+  var pct = q/10000;
+  b.className = pct > 0.2 ? 'rate-badge rate-ok' : 'rate-badge rate-warn';
+  b.textContent = pct > 0.2 ? 'SO API '+q.toLocaleString()+' left' : '⚠ SO '+q.toLocaleString()+' left';
+  b.style.display = '';
+}
+function copyLink(url, btn) {
+  navigator.clipboard.writeText(url).then(function() {
+    btn.textContent = '✓ Copied'; btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent = '⎘ Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+function toggleSave(userId, name, url, btnEl) {
+  if (savedCandidates[userId]) {
+    delete savedCandidates[userId];
+    if (btnEl) { btnEl.textContent = '☆ Save'; btnEl.classList.remove('saved'); }
+  } else {
+    savedCandidates[userId] = {userId:userId, name:name, url:url};
+    if (btnEl) { btnEl.textContent = '★ Saved'; btnEl.classList.add('saved'); }
+  }
+  updateDrawer();
+}
+function updateDrawer() {
+  var keys = Object.keys(savedCandidates);
+  document.getElementById('savedCount').textContent = keys.length;
+  var body = document.getElementById('drawerBody');
+  if (!keys.length) { body.innerHTML = '<div class="drawer-empty">No candidates saved yet.</div>'; return; }
+  body.innerHTML = keys.map(function(id) {
+    var c = savedCandidates[id];
+    return '<div class="saved-row">'+
+      '<div style="width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">👤</div>'+
+      '<div class="saved-row-info"><div class="saved-name">'+(c.name||'User #'+id)+'</div>'+
+      '<div class="saved-meta"><a href="'+c.url+'" target="_blank" style="color:var(--accent)">View on Stack Overflow ↗</a></div></div>'+
+      '<button class="btn-remove" onclick="removeSaved('+id+')">✕</button></div>';
+  }).join('');
+}
+function removeSaved(userId) {
+  delete savedCandidates[userId]; updateDrawer();
+  var b = document.getElementById('save-'+userId);
+  if (b) { b.textContent = '☆ Save'; b.classList.remove('saved'); }
+}
+function clearAll() {
+  savedCandidates = {}; updateDrawer();
+  document.querySelectorAll('.btn-save').forEach(function(b){ b.textContent = '☆ Save'; b.classList.remove('saved'); });
+}
+function toggleDrawer() {
+  document.getElementById('drawer').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+document.addEventListener('keydown', function(e){ if (e.key==='Enter') doSearch(1); });
+</script>
+</body>
+</html>
